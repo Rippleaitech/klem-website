@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KLEM</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+
+    <button class="menu-button" id="menuButton">
+        ☰
+    </button>
+
+    <div class="logo">
+        <img src="images/klem-logo-new3.png" alt="KLEM Logo">
+    </div>
+
+</header>
+
+<nav class="nav-menu" id="navMenu">
+    <a href="#" class="active">עמוד הבית</a>
+    <a href="#about">אודות</a>
+    <a href="#buildings">בניינים</a>
+    <a href="#">שירותים</a>
+    <a href="#contact">צור קשר</a>
+</nav>
+
+<section class="hero">
+
+    <video autoplay muted loop playsinline>
+        <source src="videos/klem-hero-video.mp4" type="video/mp4">
+    </video>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+        <h1>KLEM</h1>
+        <p>ניהול ואחזקה ברמה אחרת</p>
+    </div>
+
+</section>
+
+<section class="about-section" id="about">
+
+    <div class="about-container">
+
+        <h2>ברוכים הבאים ל־KLEM</h2>
+
+        <p>
+            קלמנטינה - ניהול ואחזקה הינה חברה אשר חרטה על דגלה להוביל את ענף ניהול המגדלים בישראל.
+        </p>
+
+        <p>
+            מעטות החברות בתחום שמביאות איתן גם ניקיון ברמה גבוהה ביותר וגם רקע טכני עשיר כפי שמציעה חברת קלמנטינה.
+            שביעות הרצון של לקוחותינו היא זו שמניעה אותנו ואת הצוות להמשיך ולפעול בתחום.
+        </p>
+
+        <p>
+            כל דייר בבניין מקבל גישה לאפליקציית ניהול מתקדמת בה הוא יכול לראות סטטוס תשלומים,
+            הודעות ועד ולפתוח קריאות שירות ותקלה בקלות.
+        </p>
+
+        <a href="#" class="about-button">לקביעת פגישת ייעוץ</a>
+
+    </div>
+
+</section>
+
+<section class="buildings-section" id="buildings">
+
+    <div class="slideshow">
+
+        <div class="slides-track" id="slidesTrack">
+
+            <div class="slide">
+                <img src="images/Building-1.jpeg" alt="נאות אריאל שרון, קריית אונו">
+                <div class="slide-overlay"></div>
+                <div class="slide-text">נאות אריאל שרון, קריית אונו</div>
+            </div>
+
+            <div class="slide">
+                <img src="images/Building-2.jpeg" alt="נאות אריאל שרון, קריית אונו">
+                <div class="slide-overlay"></div>
+                <div class="slide-text">נאות אריאל שרון, קריית אונו</div>
+            </div>
+
+            <div class="slide">
+                <img src="images/building-3.png" alt="נאות אריאל שרון, קריית אונו">
+                <div class="slide-overlay"></div>
+                <div class="slide-text">נאות אריאל שרון, קריית אונו</div>
+            </div>
+
+            <div class="slide">
+                <img src="images/Building-4.jpeg" alt="נאות אריאל שרון, קריית אונו">
+                <div class="slide-overlay"></div>
+                <div class="slide-text">נאות אריאל שרון, קריית אונו</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="managed-buildings-section">
+
+    <div class="section-title">
+        <h2>בניינים בניהול <span class="highlight-klem">KLEM</span></h2>
+    </div>
+
+    <div class="managed-grid">
+
+        <div class="managed-item" data-title="שכונת הדר החדשה בגבעת שמואל">
+            <img src="images/managed-1.jpeg" alt="שכונת הדר החדשה בגבעת שמואל">
+            <div class="managed-overlay">
+                <div class="managed-text">שכונת הדר החדשה בגבעת שמואל</div>
+            </div>
+        </div>
+
+        <div class="managed-item" data-title="שכונת נאות אריאל שרון בקריית אונו">
+            <img src="images/managed-2.jpeg" alt="שכונת נאות אריאל שרון בקריית אונו">
+            <div class="managed-overlay">
+                <div class="managed-text">שכונת נאות אריאל שרון בקריית אונו</div>
+            </div>
+        </div>
+
+        <div class="managed-item" data-title="שכונת הראשונים ברמת גן">
+            <img src="images/managed-3.jpeg" alt="שכונת הראשונים ברמת גן">
+            <div class="managed-overlay">
+                <div class="managed-text">שכונת הראשונים ברמת גן</div>
+            </div>
+        </div>
+
+        <div class="managed-item" data-title="שכונת עבר הירדן בקריית אונו">
+            <img src="images/managed-4.jpeg" alt="שכונת עבר הירדן בקריית אונו">
+            <div class="managed-overlay">
+                <div class="managed-text">שכונת עבר הירדן בקריית אונו</div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="statistics-section">
+
+    <div class="stats-container">
+
+        <div class="stat-item">
+            <div class="stat-number" data-target="500">0</div>
+            <div class="stat-label">דירות מנוהלות</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-number" data-target="58000">0</div>
+            <div class="stat-label">מ״ר מנוהלים</div>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="contact-section" id="contact">
+
+    <div class="contact-overlay"></div>
+
+    <div class="contact-container">
+
+        <h2>צרו קשר עם <span>KLEM</span></h2>
+
+        <form class="contact-form">
+
+            <div class="contact-row">
+                <div class="contact-field">
+                    <label for="name">שם</label>
+                    <input type="text" id="name" name="name">
+                </div>
+
+                <div class="contact-field">
+                    <label for="email">אימייל</label>
+                    <input type="email" id="email" name="email">
+                </div>
+
+                <div class="contact-field">
+                    <label for="phone">טלפון</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+            </div>
+
+            <div class="contact-field">
+                <label for="message">ההודעה שלך</label>
+                <textarea id="message" name="message"></textarea>
+            </div>
+
+            <button type="submit" class="contact-button">שלחו</button>
+
+        </form>
+
+        <div class="footer-links">
+            <a href="#">הצהרת נגישות</a>
+            <span>|</span>
+            <a href="#">תנאי שימוש</a>
+            <span>|</span>
+            <a href="privacy.html">מדיניות פרטיות</a>
+        </div>
+
+    </div>
+
+</section>
+
+<script src="script.js"></script>
+
+</body>
+</html>
