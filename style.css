@@ -125,13 +125,34 @@ header {
 }
 
 .hero-content h1 {
-    font-size: 36px;
-    letter-spacing: 6px;
+    font-size: 28px;
+    letter-spacing: 0;
     margin-bottom: 12px;
+    padding: 0 20px;
+    color: #F2B36D;
+    text-shadow:
+        -2px -2px 0 #000,
+        2px -2px 0 #000,
+        -2px 2px 0 #000,
+        2px 2px 0 #000,
+        -2px 0 0 #000,
+        2px 0 0 #000,
+        0 -2px 0 #000,
+        0 2px 0 #000;
 }
 
 .hero-content p {
     font-size: 18px;
+    color: #F2B36D;
+    text-shadow:
+        -2px -2px 0 #000,
+        2px -2px 0 #000,
+        -2px 2px 0 #000,
+        2px 2px 0 #000,
+        -2px 0 0 #000,
+        2px 0 0 #000,
+        0 -2px 0 #000,
+        0 2px 0 #000;
 }
 
 /* ABOUT */
@@ -275,12 +296,8 @@ header {
     }
 
     .hero-content h1 {
-        font-size: 48px;
-        letter-spacing: 8px;
-    }
-
-    .hero-content p {
-        font-size: 22px;
+        font-size: 42px;
+        letter-spacing: 0;
     }
 
     .slide {
@@ -393,12 +410,8 @@ header {
     }
 
     .hero-content h1 {
-        font-size: 72px;
-        letter-spacing: 12px;
-    }
-
-    .hero-content p {
-        font-size: 28px;
+        font-size: 56px;
+        letter-spacing: 0;
     }
 
     .slide {
