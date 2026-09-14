@@ -1,5 +1,5 @@
 // ==========================================
-// KLEMANTINA - INTERACTIVE FUNCTIONALITY
+// KLEMANTINA - HIGH TOWER INSPIRED
 // ==========================================
 
 // Mobile Menu Toggle
@@ -11,7 +11,13 @@ if (mobileMenuToggle) {
     mobileMenuToggle.addEventListener('click', () => {
         navMenu.classList.toggle('active');
         mobileMenuToggle.classList.toggle('active');
-        document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+
+        // Prevent body scroll when menu is open
+        if (navMenu.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
     });
 }
 
@@ -25,34 +31,27 @@ navLinks.forEach(link => {
     });
 });
 
-// Header scroll effect
-let lastScroll = 0;
-
+// Header scroll effect - transparent to solid
 window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-
-    if (currentScroll > 100) {
+    if (window.scrollY > 100) {
         header.classList.add('scrolled');
     } else {
         header.classList.remove('scrolled');
     }
-
-    lastScroll = currentScroll;
 });
 
-// Smooth scroll for anchor links
+// Smooth scroll for all anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
 
-        // Don't prevent default for empty hash
         if (href === '#' || href === '') return;
 
         e.preventDefault();
         const target = document.querySelector(href);
 
         if (target) {
-            const headerHeight = 80;
+            const headerHeight = 100;
             const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
 
             window.scrollTo({
@@ -63,67 +62,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Numbers Counter Animation
-const numberItems = document.querySelectorAll('.number-item');
-let numbersAnimated = false;
-
-const animateNumber = (element) => {
-    const valueElement = element.querySelector('.number-value');
-    const targetValue = valueElement.getAttribute('data-target');
-
-    // Skip animation if not a number
-    if (!targetValue || isNaN(targetValue) || targetValue === '0') {
-        return;
-    }
-
-    const target = parseInt(targetValue);
-    const duration = 2000;
-    const increment = target / (duration / 16);
-    let current = 0;
-
-    const updateNumber = () => {
-        current += increment;
-        if (current < target) {
-            valueElement.textContent = Math.floor(current).toLocaleString('he-IL');
-            requestAnimationFrame(updateNumber);
-        } else {
-            valueElement.textContent = target.toLocaleString('he-IL');
-        }
-    };
-
-    updateNumber();
-};
-
-// Intersection Observer for numbers section
-const numbersSection = document.querySelector('.numbers');
-if (numbersSection) {
-    const numbersObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !numbersAnimated) {
-                numbersAnimated = true;
-                numberItems.forEach(item => animateNumber(item));
-            }
-        });
-    }, { threshold: 0.3 });
-
-    numbersObserver.observe(numbersSection);
-}
-
-// Fade-in animation on scroll
-const fadeElements = document.querySelectorAll('.fade-in');
-const slideElements = document.querySelectorAll('.slide-up');
-
-const scrollObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
+// Project items - subtle scale effect on hover (handled by CSS but enhanced here)
+const projectItems = document.querySelectorAll('.project-item');
+projectItems.forEach(item => {
+    item.addEventListener('mouseenter', () => {
+        item.style.cursor = 'pointer';
     });
-}, { threshold: 0.1 });
-
-fadeElements.forEach(el => scrollObserver.observe(el));
-slideElements.forEach(el => scrollObserver.observe(el));
+});
 
 // Contact Form Handler
 const contactForm = document.querySelector('.contact-form');
@@ -135,10 +80,10 @@ if (contactForm) {
         const formData = new FormData(contactForm);
         const data = Object.fromEntries(formData);
 
-        // Here you would send the data to your server
+        // Here you would typically send data to server
         console.log('Form submitted:', data);
 
-        // Show success message
+        // Success message
         alert('תודה! פנייתך נשלחה בהצלחה. ניצור איתך קשר בקרוב.');
 
         // Reset form
@@ -146,79 +91,99 @@ if (contactForm) {
     });
 }
 
-// Project cards hover effect (subtle scale on image)
-const projectCards = document.querySelectorAll('.project-card');
-projectCards.forEach(card => {
-    const imageContainer = card.querySelector('.project-image-placeholder');
+// Intersection Observer for fade-in animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+};
 
-    card.addEventListener('mouseenter', () => {
-        imageContainer.style.transform = 'scale(1.05)';
-        imageContainer.style.transition = 'transform 0.6s ease';
-    });
-
-    card.addEventListener('mouseleave', () => {
-        imageContainer.style.transform = 'scale(1)';
-    });
-});
-
-// Service cards hover effect
-const serviceCards = document.querySelectorAll('.service-card');
-serviceCards.forEach(card => {
-    const imageContainer = card.querySelector('.service-image-placeholder');
-
-    card.addEventListener('mouseenter', () => {
-        imageContainer.style.transform = 'scale(1.05)';
-        imageContainer.style.transition = 'transform 0.6s ease';
-    });
-
-    card.addEventListener('mouseleave', () => {
-        imageContainer.style.transform = 'scale(1)';
-    });
-});
-
-// Gallery items hover effect
-const galleryItems = document.querySelectorAll('.gallery-item');
-galleryItems.forEach(item => {
-    const placeholder = item.querySelector('.gallery-placeholder');
-
-    item.addEventListener('mouseenter', () => {
-        placeholder.style.transform = 'scale(1.05)';
-        placeholder.style.transition = 'transform 0.6s ease';
-    });
-
-    item.addEventListener('mouseleave', () => {
-        placeholder.style.transform = 'scale(1)';
-    });
-});
-
-// Prevent scroll when mobile menu is open
-if (mobileMenuToggle) {
-    const checkMenuState = () => {
-        if (navMenu.classList.contains('active')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-    };
-
-    // Check on resize
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 1024) {
-            navMenu.classList.remove('active');
-            mobileMenuToggle.classList.remove('active');
-            document.body.style.overflow = '';
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
         }
     });
-}
+}, observerOptions);
 
-// Initialize
+// Add fade-in effect to sections
+const sections = document.querySelectorAll('.about, .projects, .numbers, .why-section, .gallery-section');
+sections.forEach(section => {
+    section.style.opacity = '0';
+    section.style.transform = 'translateY(30px)';
+    section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    observer.observe(section);
+});
+
+// Project items stagger animation
+const projectItemsAnim = document.querySelectorAll('.project-item');
+projectItemsAnim.forEach((item, index) => {
+    item.style.opacity = '0';
+    item.style.transform = 'translateY(40px)';
+    item.style.transition = `opacity 0.8s ease ${index * 0.15}s, transform 0.8s ease ${index * 0.15}s`;
+
+    const projectObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.2 });
+
+    projectObserver.observe(item);
+});
+
+// Service blocks reveal animation
+const serviceBlocks = document.querySelectorAll('.service-block');
+serviceBlocks.forEach((block, index) => {
+    block.style.opacity = '0';
+    block.style.transform = 'translateY(30px)';
+    block.style.transition = `opacity 0.7s ease ${index * 0.1}s, transform 0.7s ease ${index * 0.1}s`;
+
+    const serviceObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.15 });
+
+    serviceObserver.observe(block);
+});
+
+// Gallery images stagger
+const galleryImages = document.querySelectorAll('.gallery-image');
+galleryImages.forEach((img, index) => {
+    img.style.opacity = '0';
+    img.style.transform = 'scale(0.95)';
+    img.style.transition = `opacity 0.6s ease ${index * 0.08}s, transform 0.6s ease ${index * 0.08}s`;
+
+    const galleryObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'scale(1)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    galleryObserver.observe(img);
+});
+
+// Prevent menu issues on window resize
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 1023) {
+        navMenu.classList.remove('active');
+        mobileMenuToggle.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+});
+
+// Initialize - Ensure header starts in correct state
 document.addEventListener('DOMContentLoaded', () => {
-    // Add smooth reveal to hero content
-    const heroContent = document.querySelector('.hero-content');
-    if (heroContent) {
-        setTimeout(() => {
-            heroContent.style.opacity = '1';
-            heroContent.style.transform = 'translateY(0)';
-        }, 300);
+    if (window.scrollY > 100) {
+        header.classList.add('scrolled');
     }
 });
