@@ -1,218 +1,479 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KLEM</title>
-
+    <title>KLEMANTINA - ניהול ואחזקת מגדלי מגורים</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
+<!-- HEADER -->
+<header class="header" id="mainHeader">
+    <div class="header-container">
+        <div class="logo">
+            <span class="logo-text">KLEMANTINA</span>
+        </div>
 
-    <button class="menu-button" id="menuButton">
-        ☰
-    </button>
+        <nav class="nav-menu" id="navMenu">
+            <a href="#home">ראשי</a>
+            <a href="#about">אודות</a>
+            <a href="#projects">פרויקטים</a>
+            <a href="#services">שירותים</a>
+            <a href="#why">למה קלמנטינה</a>
+            <a href="#contact">צור קשר</a>
+        </nav>
 
-    <div class="logo">
-        <img src="images/klem-logo.png" alt="KLEM Logo">
+        <a href="#contact" class="cta-button">תיאום פגישה</a>
+
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </div>
-
 </header>
 
-<nav class="nav-menu" id="navMenu">
-    <a href="#" class="active">עמוד הבית</a>
-    <a href="#about">אודות</a>
-    <a href="#buildings">בניינים</a>
-    <a href="#">שירותים</a>
-    <a href="#contact">צור קשר</a>
-</nav>
-
-<section class="hero">
-
-    <video autoplay muted loop playsinline>
-        <source src="videos/klem-hero-video.mp4" type="video/mp4">
-    </video>
-
+<!-- SECTION 1 – HERO -->
+<section class="hero" id="home">
+    <div class="hero-image-placeholder">
+        <div class="placeholder-content">
+            <span>תמונת מגדל מגורים - PLACEHOLDER</span>
+        </div>
+    </div>
     <div class="hero-overlay"></div>
-
     <div class="hero-content">
-        <h1>KLEMANTINA</h1>
-        <p>ניהול ואחזקה</p>
+        <h1 class="hero-title">KLEMANTINA</h1>
+        <h2 class="hero-subtitle">ניהול ואחזקת מגדלי מגורים</h2>
+        <p class="hero-tagline">ניהול מקצועי. תחזוקה ללא פשרות.<br>שקט לדיירים ולוועד.</p>
+        <a href="#contact" class="hero-cta">תיאום פגישת היכרות</a>
     </div>
-
+    <div class="scroll-indicator">
+        <span class="scroll-arrow"></span>
+    </div>
 </section>
 
-<section class="about-section" id="about">
-
-    <div class="about-container">
-
-        <h2>ברוכים הבאים למשפחת KLEMANTINA</h2>
-
-        <p>
-            קלמנטינה - ניהול ואחזקה הינה חברה אשר חרטה על דגלה להוביל את ענף ניהול המגדלים בישראל.
-        </p>
-
-        <p>
-            מעטות החברות בתחום שמביאות איתן גם ניקיון ברמה גבוהה ביותר וגם רקע טכני עשיר כפי שמציעה חברת קלמנטינה.
-            שביעות הרצון של לקוחותינו היא זו שמניעה אותנו ואת הצוות להמשיך ולפעול בתחום.
-        </p>
-
-        <p>
-            כל דייר בבניין מקבל גישה לאפליקציית ניהול מתקדמת בה הוא יכול לראות סטטוס תשלומים,
-            הודעות ועד ולפתוח קריאות שירות ותקלה בקלות.
-        </p>
-
-        <a href="#" class="about-button">לקביעת פגישת ייעוץ</a>
-
+<!-- SECTION 2 – ABOUT -->
+<section class="about" id="about">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-text">
+                <h2 class="section-title large">אנחנו מנהלים את הבניין כאילו הוא שלנו.</h2>
+                <p class="about-description">
+                    קלמנטינה מתמחה בניהול ואחזקה של מגדלי מגורים ומתחמים באזור המרכז.
+                    אנחנו משלבים ניהול מקצועי, מערך ניקיון, יכולת טכנית ושירות אישי כדי לספק לבניין
+                    מעטפת מלאה תחת קורת גג אחת.
+                </p>
+            </div>
+            <div class="about-image">
+                <div class="image-placeholder">
+                    <span>תמונה מהפעילות - PLACEHOLDER</span>
+                </div>
+            </div>
+        </div>
     </div>
-
 </section>
 
-<section class="buildings-section" id="buildings">
-
-    <div class="slideshow">
-
-        <div class="slides-track" id="slidesTrack">
-
-            <div class="slide">
-                <img src="images/Building-1.jpeg" alt="נאות אריאל שרון, קריית אונו">
-                <div class="slide-overlay"></div>
-                <div class="slide-text">נאות אריאל שרון, קריית אונו</div>
-            </div>
-
-            <div class="slide">
-                <img src="images/Building-2.jpeg" alt="אלוני בורכוב, רמת גן">
-                <div class="slide-overlay"></div>
-                <div class="slide-text">אלוני בורכוב, רמת גן</div>
-            </div>
-
-            <div class="slide">
-                <img src="images/building-3.png" alt="נאות אריאל שרון, קריית אונו">
-                <div class="slide-overlay"></div>
-                <div class="slide-text">נאות אריאל שרון, קריית אונו</div>
-            </div>
-
-            <div class="slide">
-                <img src="images/Building-4.jpeg" alt="נאות אריאל שרון, קריית אונו">
-                <div class="slide-overlay"></div>
-                <div class="slide-text">נאות אריאל שרון, קריית אונו</div>
-            </div>
-
+<!-- SECTION 3 – PROJECTS -->
+<section class="projects" id="projects">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">הפרויקטים שלנו</h2>
+            <p class="section-subtitle">מגדלים ומתחמי מגורים שאנחנו גאים לנהל.</p>
         </div>
 
-    </div>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image-placeholder">
+                    <span>PROJECT 01</span>
+                </div>
+                <div class="project-info">
+                    <h3 class="project-name">PROJECT 01</h3>
+                    <p class="project-location">עיר</p>
+                </div>
+            </div>
 
+            <div class="project-card">
+                <div class="project-image-placeholder">
+                    <span>PROJECT 02</span>
+                </div>
+                <div class="project-info">
+                    <h3 class="project-name">PROJECT 02</h3>
+                    <p class="project-location">עיר</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image-placeholder">
+                    <span>PROJECT 03</span>
+                </div>
+                <div class="project-info">
+                    <h3 class="project-name">PROJECT 03</h3>
+                    <p class="project-location">עיר</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image-placeholder">
+                    <span>PROJECT 04</span>
+                </div>
+                <div class="project-info">
+                    <h3 class="project-name">PROJECT 04</h3>
+                    <p class="project-location">עיר</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="projects-cta">
+            <a href="#" class="secondary-button">לכל הפרויקטים</a>
+        </div>
+    </div>
 </section>
 
-<section class="managed-buildings-section">
+<!-- SECTION 4 – NUMBERS -->
+<section class="numbers">
+    <div class="container">
+        <div class="numbers-grid">
+            <div class="number-item">
+                <div class="number-value" data-target="0">X</div>
+                <div class="number-label">מ"ר מנוהלים</div>
+            </div>
 
-    <div class="section-title">
-        <h2>בניינים בניהול <span class="highlight-klem">KLEM</span></h2>
+            <div class="number-item">
+                <div class="number-value" data-target="0">X</div>
+                <div class="number-label">יחידות דיור</div>
+            </div>
+
+            <div class="number-item">
+                <div class="number-value" data-target="0">X</div>
+                <div class="number-label">פרויקטים</div>
+            </div>
+
+            <div class="number-item">
+                <div class="number-value">24/7</div>
+                <div class="number-label">שירות וזמינות</div>
+            </div>
+        </div>
     </div>
-
-    <div class="managed-grid">
-
-        <div class="managed-item" data-title="שכונת הדר החדשה בגבעת שמואל">
-            <img src="images/managed-1.jpeg" alt="שכונת הדר החדשה בגבעת שמואל">
-            <div class="managed-overlay">
-                <div class="managed-text">שכונת הדר החדשה בגבעת שמואל</div>
-            </div>
-        </div>
-
-        <div class="managed-item" data-title="שכונת נאות אריאל שרון בקריית אונו">
-            <img src="images/managed-2.jpeg" alt="שכונת נאות אריאל שרון בקריית אונו">
-            <div class="managed-overlay">
-                <div class="managed-text">שכונת נאות אריאל שרון בקריית אונו</div>
-            </div>
-        </div>
-
-        <div class="managed-item" data-title="אלוני בורכוב, רמת גן">
-            <img src="images/managed-3.jpeg" alt="אלוני בורכוב, רמת גן">
-            <div class="managed-overlay">
-                <div class="managed-text">אלוני בורכוב, רמת גן</div>
-            </div>
-        </div>
-
-        <div class="managed-item" data-title="שכונת עבר הירדן בקריית אונו">
-            <img src="images/managed-4.jpeg" alt="שכונת עבר הירדן בקריית אונו">
-            <div class="managed-overlay">
-                <div class="managed-text">שכונת עבר הירדן בקריית אונו</div>
-            </div>
-        </div>
-
-    </div>
-
 </section>
 
-<section class="statistics-section">
+<!-- SECTION 5 – SERVICES -->
+<section class="services" id="services">
+    <div class="container">
+        <h2 class="section-title centered">כל מה שהבניין צריך. תחת קורת גג אחת.</h2>
 
-    <div class="stats-container">
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-image-placeholder">
+                    <span>ניהול ואחזקה</span>
+                </div>
+                <h3 class="service-title">ניהול ואחזקה</h3>
+            </div>
 
-        <div class="stat-item">
-            <div class="stat-number" data-target="500">0</div>
-            <div class="stat-label">דירות מנוהלות</div>
+            <div class="service-card">
+                <div class="service-image-placeholder">
+                    <span>ניקיון וטיפוח</span>
+                </div>
+                <h3 class="service-title">ניקיון וטיפוח</h3>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image-placeholder">
+                    <span>אחזקה טכנית</span>
+                </div>
+                <h3 class="service-title">אחזקה טכנית</h3>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image-placeholder">
+                    <span>ניהול ספקים</span>
+                </div>
+                <h3 class="service-title">ניהול ספקים</h3>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image-placeholder">
+                    <span>ניהול כספים וגבייה</span>
+                </div>
+                <h3 class="service-title">ניהול כספים וגבייה</h3>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image-placeholder">
+                    <span>גינון ופיתוח</span>
+                </div>
+                <h3 class="service-title">גינון ופיתוח</h3>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image-placeholder">
+                    <span>תחזוקת מערכות</span>
+                </div>
+                <h3 class="service-title">תחזוקת מערכות הבניין</h3>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image-placeholder">
+                    <span>מוקד 24/7</span>
+                </div>
+                <h3 class="service-title">מוקד שירות 24/7</h3>
+            </div>
         </div>
-
-        <div class="stat-item">
-            <div class="stat-number" data-target="58000">0</div>
-            <div class="stat-label">מ״ר מנוהלים</div>
-        </div>
-
     </div>
-
 </section>
 
-<section class="contact-section" id="contact">
+<!-- SECTION 6 – WHY KLEMANTINA -->
+<section class="why-klemantina" id="why">
+    <div class="container">
+        <h2 class="section-title large white">ניהול שרואים.<br>שירות שמרגישים.</h2>
 
-    <div class="contact-overlay"></div>
+        <div class="why-grid">
+            <div class="why-item">
+                <h3 class="why-title">אנשי שטח</h3>
+                <p class="why-description">נוכחות אמיתית בבניין וטיפול שוטף ולא רק ניהול מרחוק.</p>
+            </div>
 
-    <div class="contact-container">
+            <div class="why-item">
+                <h3 class="why-title">יכולת טכנית</h3>
+                <p class="why-description">הבנה מעשית של מערכות הבניין וטיפול מהיר בתקלות.</p>
+            </div>
 
-        <h2>צרו קשר עם <span>KLEM</span></h2>
+            <div class="why-item">
+                <h3 class="why-title">שקיפות</h3>
+                <p class="why-description">ניהול מסודר ושקוף מול הנציגות והדיירים.</p>
+            </div>
+
+            <div class="why-item">
+                <h3 class="why-title">שירות אישי</h3>
+                <p class="why-description">זמינות, תקשורת ישירה ואחריות עד לסיום הטיפול.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 7 – FROM THE FIELD -->
+<section class="from-field">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">מהשטח</h2>
+            <p class="section-subtitle">הניהול שלנו מתחיל בנוכחות יומיומית בשטח.</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item large">
+                <div class="gallery-placeholder">
+                    <span>תמונה 1</span>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-placeholder">
+                    <span>תמונה 2</span>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-placeholder">
+                    <span>תמונה 3</span>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-placeholder">
+                    <span>תמונה 4</span>
+                </div>
+            </div>
+
+            <div class="gallery-item large">
+                <div class="gallery-placeholder">
+                    <span>תמונה 5</span>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-placeholder">
+                    <span>תמונה 6</span>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-placeholder">
+                    <span>תמונה 7</span>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <div class="gallery-placeholder">
+                    <span>תמונה 8</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 8 – TECHNOLOGY -->
+<section class="technology">
+    <div class="container">
+        <div class="tech-content">
+            <div class="tech-text">
+                <h2 class="section-title">ניהול מתקדם. שקיפות מלאה.</h2>
+                <div class="tech-features">
+                    <div class="tech-feature">
+                        <h4>קריאות שירות</h4>
+                    </div>
+                    <div class="tech-feature">
+                        <h4>הודעות ועדכונים</h4>
+                    </div>
+                    <div class="tech-feature">
+                        <h4>מעקב אחר תשלומים</h4>
+                    </div>
+                    <div class="tech-feature">
+                        <h4>תקשורת עם הדיירים</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="tech-visual">
+                <div class="phone-placeholder">
+                    <span>הדמיית אפליקציה</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 9 – TESTIMONIALS -->
+<section class="testimonials">
+    <div class="container">
+        <h2 class="section-title centered">מה אומרים עלינו</h2>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p class="testimonial-text">המלצה תתווסף כאן</p>
+                </div>
+                <div class="testimonial-author">
+                    <p class="author-name">שם</p>
+                    <p class="author-building">בניין / נציגות</p>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p class="testimonial-text">המלצה תתווסף כאן</p>
+                </div>
+                <div class="testimonial-author">
+                    <p class="author-name">שם</p>
+                    <p class="author-building">בניין / נציגות</p>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p class="testimonial-text">המלצה תתווסף כאן</p>
+                </div>
+                <div class="testimonial-author">
+                    <p class="author-name">שם</p>
+                    <p class="author-building">בניין / נציגות</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 10 – FINAL CTA -->
+<section class="final-cta">
+    <div class="final-cta-image-placeholder">
+        <div class="placeholder-content">
+            <span>תמונת מגדל/לובי - PLACEHOLDER</span>
+        </div>
+    </div>
+    <div class="final-cta-overlay"></div>
+    <div class="final-cta-content">
+        <h2 class="final-cta-title">הבניין שלכם יכול להיות מנוהל אחרת.</h2>
+        <p class="final-cta-text">בואו נכיר ונראה איך אפשר לשפר את הניהול, התחזוקה והשירות בבניין שלכם.</p>
+        <div class="final-cta-buttons">
+            <a href="#contact" class="primary-button">תיאום פגישת היכרות</a>
+            <a href="#" class="whatsapp-button">שלחו לנו WhatsApp</a>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section class="contact" id="contact">
+    <div class="container">
+        <h2 class="section-title centered">צור קשר</h2>
 
         <form class="contact-form">
-
-            <div class="contact-row">
-                <div class="contact-field">
-                    <label for="name">שם</label>
-                    <input type="text" id="name" name="name">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fullname">שם מלא</label>
+                    <input type="text" id="fullname" name="fullname" required>
                 </div>
 
-                <div class="contact-field">
-                    <label for="email">אימייל</label>
-                    <input type="email" id="email" name="email">
-                </div>
-
-                <div class="contact-field">
+                <div class="form-group">
                     <label for="phone">טלפון</label>
-                    <input type="tel" id="phone" name="phone">
+                    <input type="tel" id="phone" name="phone" required>
                 </div>
             </div>
 
-            <div class="contact-field">
-                <label for="message">ההודעה שלך</label>
-                <textarea id="message" name="message"></textarea>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">אימייל</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="building">שם / כתובת הבניין</label>
+                    <input type="text" id="building" name="building">
+                </div>
             </div>
 
-            <button type="submit" class="contact-button">שלחו</button>
+            <div class="form-group full-width">
+                <label for="message">הודעה</label>
+                <textarea id="message" name="message" rows="6"></textarea>
+            </div>
 
+            <button type="submit" class="submit-button">שליחת פרטים</button>
         </form>
-
-        <div class="footer-links">
-            <a href="#">הצהרת נגישות</a>
-            <span>|</span>
-            <a href="#">תנאי שימוש</a>
-            <span>|</span>
-            <a href="privacy.html">מדיניות פרטיות</a>
-        </div>
-
     </div>
-
 </section>
 
-<script src="script.js"></script>
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <span class="logo-text">KLEMANTINA</span>
+                </div>
+                <p class="footer-tagline">ניהול ואחזקת מגדלי מגורים</p>
+            </div>
 
+            <div class="footer-info">
+                <div class="footer-contact">
+                    <p><strong>טלפון:</strong> [PLACEHOLDER]</p>
+                    <p><strong>WhatsApp:</strong> [PLACEHOLDER]</p>
+                    <p><strong>אימייל:</strong> [PLACEHOLDER]</p>
+                    <p><strong>כתובת:</strong> [PLACEHOLDER]</p>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <a href="#home">ראשי</a>
+                <a href="#about">אודות</a>
+                <a href="#projects">פרויקטים</a>
+                <a href="#services">שירותים</a>
+                <a href="#why">למה קלמנטינה</a>
+                <a href="#contact">צור קשר</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 KLEMANTINA. כל הזכויות שמורות.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
