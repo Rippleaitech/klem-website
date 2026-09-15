@@ -347,6 +347,23 @@ header {
     transition: transform 0.3s ease;
 }
 
+/* Special positioning for Hadar tower to show more of the building on mobile */
+.managed-item[data-title="שכונת הדר החדשה בגבעת שמואל"] img {
+    object-position: center 20%;
+}
+
+@media (min-width: 481px) {
+    .managed-item[data-title="שכונת הדר החדשה בגבעת שמואל"] img {
+        object-position: center 25%;
+    }
+}
+
+@media (min-width: 769px) {
+    .managed-item[data-title="שכונת הדר החדשה בגבעת שמואל"] img {
+        object-position: center 30%;
+    }
+}
+
 .managed-overlay {
     position: absolute;
     inset: 0;
