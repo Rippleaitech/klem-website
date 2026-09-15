@@ -38,32 +38,64 @@ setInterval(() => {
 
 }, 3500);
 
+// Project Data
+const projectData = {
+    "שכונת הדר החדשה בגבעת שמואל": {
+        title: "שכונת הדר, גבעת שמואל",
+        text: `<p>פרויקט מגורים רחב היקף בשכונת הדר המבוקשת בגבעת שמואל, הכולל מגדלי מגורים וסביבה משותפת מטופחת. המתחם משלב לובאים מעוצבים, שטחים ירוקים, גינות, שבילים ושטחים משותפים המשרתים את דיירי הפרויקט.</p><p>קלמנטינה אחראית על הניהול והתחזוקה השוטפת של המתחם, לרבות ניקיון, גינון, תחזוקת המערכות והשטחים המשותפים, תוך שמירה על סטנדרט גבוה וחוויית מגורים איכותית לאורך זמן.</p>`,
+        cover: "images/cover_lipkin.jpeg",
+        gallery: [
+            "images/images1/קלמנטינה ניהול ואחזקה גלריה.jpeg"
+        ]
+    }
+};
+
 // Managed Buildings Interactions
 const managedItems = document.querySelectorAll(".managed-item");
 
 managedItems.forEach(item => {
     const overlay = item.querySelector(".managed-overlay");
-    let tapTimeout = null;
-    let lastTap = 0;
+    const projectTitle = item.getAttribute("data-title");
 
-    // Touch events for mobile/tablet
-    item.addEventListener("touchstart", (e) => {
-        const currentTime = new Date().getTime();
-        const tapLength = currentTime - lastTap;
+    // Check if this project has detail data
+    const hasProjectData = projectData[projectTitle];
 
-        // Double tap detection (future use for links)
-        if (tapLength < 300 && tapLength > 0) {
-            // Double tap - will add link functionality later
+    if (hasProjectData) {
+        // For projects with data (like Hadar), single click opens modal
+        item.addEventListener("click", (e) => {
             e.preventDefault();
-        } else {
-            // Single tap - show overlay
-            overlay.classList.toggle("active");
-        }
+            openProjectModal(projectTitle);
+        });
 
-        lastTap = currentTime;
-    });
+        item.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+        });
 
-    // Desktop hover is handled by CSS
+        item.addEventListener("touchend", (e) => {
+            e.preventDefault();
+            openProjectModal(projectTitle);
+        });
+
+        // Change cursor to pointer
+        item.style.cursor = "pointer";
+    } else {
+        // For other projects, keep the original overlay behavior
+        let tapTimeout = null;
+        let lastTap = 0;
+
+        item.addEventListener("touchstart", (e) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+
+            if (tapLength < 300 && tapLength > 0) {
+                e.preventDefault();
+            } else {
+                overlay.classList.toggle("active");
+            }
+
+            lastTap = currentTime;
+        });
+    }
 });
 
 // Statistics Counter Animation
@@ -117,3 +149,85 @@ if (contactForm) {
         contactForm.reset();
     });
 }
+
+// Project Modal Functions
+const projectModal = document.getElementById("projectModal");
+const projectModalOverlay = document.getElementById("projectModalOverlay");
+const projectModalClose = document.getElementById("projectModalClose");
+const projectModalTitle = document.getElementById("projectModalTitle");
+const projectModalText = document.getElementById("projectModalText");
+const projectModalCover = document.getElementById("projectModalCover");
+const projectModalGallery = document.getElementById("projectModalGallery");
+
+function openProjectModal(projectKey) {
+    const project = projectData[projectKey];
+    if (!project) return;
+
+    // Set content
+    projectModalTitle.textContent = project.title;
+    projectModalText.innerHTML = project.text;
+
+    // Set cover image
+    projectModalCover.innerHTML = `<img src="${project.cover}" alt="${project.title}">`;
+
+    // Set gallery images
+    projectModalGallery.innerHTML = "";
+    project.gallery.forEach((imgSrc, index) => {
+        const img = document.createElement("img");
+        img.src = imgSrc;
+        img.alt = `${project.title} - תמונה ${index + 1}`;
+        img.addEventListener("click", () => openGalleryLightbox(imgSrc));
+        projectModalGallery.appendChild(img);
+    });
+
+    // Show modal
+    projectModal.classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+
+function closeProjectModal() {
+    projectModal.classList.remove("active");
+    document.body.style.overflow = "";
+}
+
+// Close modal on overlay click
+projectModalOverlay.addEventListener("click", closeProjectModal);
+
+// Close modal on close button click
+projectModalClose.addEventListener("click", closeProjectModal);
+
+// Close modal on Escape key
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && projectModal.classList.contains("active")) {
+        closeProjectModal();
+    }
+});
+
+// Gallery Lightbox Functions
+const galleryLightbox = document.getElementById("galleryLightbox");
+const galleryLightboxOverlay = document.getElementById("galleryLightboxOverlay");
+const galleryLightboxClose = document.getElementById("galleryLightboxClose");
+const galleryLightboxImage = document.getElementById("galleryLightboxImage");
+
+function openGalleryLightbox(imageSrc) {
+    galleryLightboxImage.src = imageSrc;
+    galleryLightbox.classList.add("active");
+}
+
+function closeGalleryLightbox() {
+    galleryLightbox.classList.remove("active");
+    galleryLightboxImage.src = "";
+}
+
+// Close lightbox on overlay click
+galleryLightboxOverlay.addEventListener("click", closeGalleryLightbox);
+
+// Close lightbox on close button click
+galleryLightboxClose.addEventListener("click", closeGalleryLightbox);
+
+// Close lightbox on Escape key
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && galleryLightbox.classList.contains("active")) {
+        closeGalleryLightbox();
+    }
+});
