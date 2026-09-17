@@ -855,7 +855,7 @@ header {
 
 .project-modal-cover img {
     width: 100%;
-    height: 280px;
+    height: 200px;
     object-fit: cover;
     display: block;
 }
@@ -895,7 +895,7 @@ header {
     }
 
     .project-modal-cover img {
-        height: 300px;
+        height: 220px;
     }
 
     .project-modal-gallery {
@@ -919,7 +919,7 @@ header {
     }
 
     .project-modal-cover img {
-        height: 320px;
+        height: 240px;
     }
 
     .project-modal-gallery img {

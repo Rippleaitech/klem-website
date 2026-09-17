@@ -59,6 +59,12 @@ const projectData = {
             "images/Ariel_Sharon_2.jpeg",
             "images/Ariel_Sharon_3.jpeg"
         ]
+    },
+    "אלוני בורכוב, רמת גן": {
+        title: "אלוני בורכוב, רמת גן",
+        text: ``,
+        cover: "images/Aloni_Borochov_Cover.jpeg",
+        gallery: []
     }
 };
 
