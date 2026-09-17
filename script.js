@@ -66,7 +66,8 @@ const projectData = {
         cover: "images/Aloni_Borochov_Cover.jpeg",
         gallery: [
             "images/Aloni_Borochov_1.jpeg",
-            "images/Aloni_Borochov_2.jpeg"
+            "images/Aloni_Borochov_2.jpeg",
+            "images/Aloni_Borochov_3.jpeg"
         ]
     }
 };
