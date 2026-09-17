@@ -851,14 +851,12 @@ header {
     margin-bottom: 40px;
     border-radius: 8px;
     overflow: hidden;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .project-modal-cover img {
     width: 100%;
-    height: auto;
+    height: 280px;
+    object-fit: cover;
     display: block;
 }
 
@@ -896,6 +894,10 @@ header {
         font-size: 19px;
     }
 
+    .project-modal-cover img {
+        height: 300px;
+    }
+
     .project-modal-gallery {
         grid-template-columns: repeat(2, 1fr);
         gap: 24px;
@@ -914,6 +916,10 @@ header {
 
     .project-modal-title {
         font-size: 42px;
+    }
+
+    .project-modal-cover img {
+        height: 320px;
     }
 
     .project-modal-gallery img {
