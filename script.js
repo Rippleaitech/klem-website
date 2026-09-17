@@ -54,7 +54,9 @@ const projectData = {
         title: "שכונת נאות אריאל שרון | קריית אונו",
         text: ``,
         cover: "images/cover_ariel_sharon_1.jpeg",
-        gallery: []
+        gallery: [
+            "images/cover_ariel_sharon_2.jpeg"
+        ]
     }
 };
 
