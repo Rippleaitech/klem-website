@@ -448,87 +448,49 @@ if (contactForm) {
     });
 }
 
-// Project Modal Functions
-let lastFocusedBeforeDialog = null;
-let lastFocusedBeforeLightbox = null;
+// Accessibility Toolbar
+const accessibilityToolbar = document.createElement('div');
+accessibilityToolbar.classList.add('accessibility-toolbar');
 
-const restoreFocusAfterDialog = () => {
-    if (lastFocusedBeforeDialog) {
-        lastFocusedBeforeDialog.focus();
-        lastFocusedBeforeDialog = null;
-    }
-};
+const accessibilityToggle = document.createElement('button');
+accessibilityToggle.classList.add('accessibility-toggle');
+// Here you can add an SVG or text to represent the toggle
+accessibilityToolbar.appendChild(accessibilityToggle);
 
-const projectModal = document.getElementById("projectModal");
-const projectModalOverlay = document.getElementById("projectModalOverlay");
-const projectModalClose = document.getElementById("projectModalClose");
-const projectModalTitle = document.getElementById("projectModalTitle");
-const projectModalText = document.getElementById("projectModalText");
-const projectModalCover = document.getElementById("projectModalCover");
-const projectModalGallery = document.getElementById("projectModalGallery");
+const accessibilityMenu = document.createElement('div');
+accessibilityMenu.classList.add('accessibility-menu');
 
-function openProjectModal(projectKey) {
-    const project = projectData[projectKey];
-    if (!project) return;
+const accessibilityMenuHeader = document.createElement('div');
+accessibilityMenuHeader.classList.add('accessibility-menu-header');
+accessibilityMenu.appendChild(accessibilityMenuHeader);
 
-    // Set content
-    projectModalTitle.textContent = project.title;
-    projectModalText.innerHTML = project.text;
+const accessibilityMenuClose = document.createElement('button');
+accessibilityMenuClose.classList.add('accessibility-menu-close');
+accessibilityMenuClose.textContent = '×';
+accessibilityMenuHeader.appendChild(accessibilityMenuClose);
 
-    // Set cover image
-    projectModalCover.innerHTML = `<img src="${project.cover}" alt="${project.title}">`;
+accessibilityToolbar.appendChild(accessibilityMenu);
 
-    // Set gallery images
-    projectModalGallery.innerHTML = "";
-    project.gallery.forEach((imgSrc, index) => {
-        const img = document.createElement("img");
-        img.src = imgSrc;
-        img.alt = `${project.title} - תמונה ${index + 1}`;
-        img.setAttribute("role", "button");
-        img.setAttribute("tabindex", "0");
-        img.setAttribute("aria-label", `${project.title} - הגדלת תמונה ${index + 1}`);
-        img.addEventListener("click", () => openGalleryLightbox(imgSrc));
-        img.addEventListener("keydown", (ev) => {
-            if (ev.key === "Enter" || ev.key === " " || ev.key === "Spacebar") {
-                ev.preventDefault();
-                openGalleryLightbox(imgSrc);
-            }
-        });
-        projectModalGallery.appendChild(img);
-    });
+document.body.appendChild(accessibilityToolbar);
 
-    // Show modal
-    lastFocusedBeforeDialog = document.activeElement;
-    projectModal.classList.add("active");
-    document.body.style.overflow = "hidden";
-    projectModal.focus();
-}
+// Close menu on close button click
+accessibilityMenuClose.addEventListener('click', () => {
+    accessibilityToolbar.classList.remove('active');
+});
 
-function closeProjectModal() {
-    projectModal.classList.remove("active");
-    document.body.style.overflow = "";
-    restoreFocusAfterDialog();
-}
+// Open accessibility menu on toggle button click
+accessibilityToggle.addEventListener('click', () => {
+    accessibilityToolbar.classList.toggle('active');
+});
 
-// Close modal on overlay click
-if (projectModalOverlay) {
-    projectModalOverlay.addEventListener("click", closeProjectModal);
-}
-
-// Close modal on close button click
-if (projectModalClose) {
-    projectModalClose.addEventListener("click", closeProjectModal);
-}
-
-// Close modal on Escape key
+// Close menu on Escape key
 document.addEventListener("keydown", (e) => {
-    if (!projectModal || !projectModal.classList.contains("active")) return;
+    if (!accessibilityToolbar.classList.contains("active")) return;
 
     if (e.key === "Escape") {
-        closeProjectModal();
+        accessibilityToolbar.classList.remove('active');
         return;
     }
-    trapFocus(projectModal, e);
 });
 
 // Gallery Lightbox Functions
@@ -573,3 +535,170 @@ document.addEventListener("keydown", (e) => {
     }
     trapFocus(galleryLightbox, e);
 });
+
+/* Accessibility Toolbar */
+.accessibility-toolbar {
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    z-index: 999;
+}
+
+.accessibility-toggle {
+    width: 50px;
+    height: 50px;
+    background: #ff6b35;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.accessibility-toggle:hover,
+.accessibility-toggle:focus {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    background: #e55a25;
+}
+
+.accessibility-toggle svg {
+    width: 28px;
+    height: 28px;
+}
+
+.accessibility-menu {
+    position: absolute;
+    top: 0;
+    left: 60px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    min-width: 220px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.accessibility-toolbar.active .accessibility-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.accessibility-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    font-weight: 600;
+    color: #333;
+}
+
+.accessibility-menu-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+}
+
+.accessibility-menu-close:hover,
+.accessibility-menu-close:focus {
+    color: #ff6b35;
+}
+
+.accessibility-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 15px;
+    background: none;
+    border: none;
+    text-align: right;
+    cursor: pointer;
+    transition: background 0.3s;
+    color: #555;
+    font-size: 14px;
+}
+
+.accessibility-option:hover,
+.accessibility-option:focus {
+    background: #f8f8f8;
+    color: #ff6b35;
+}
+
+.accessibility-option[aria-pressed="true"] {
+    background: #fff5f2;
+    color: #ff6b35;
+}
+
+.accessibility-icon {
+    font-size: 18px;
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.accessibility-statement-link {
+    display: block;
+    padding: 12px 15px;
+    text-align: center;
+    color: #ff6b35;
+    text-decoration: none;
+    border-top: 1px solid #eee;
+    font-size: 13px;
+    transition: background 0.3s;
+}
+
+.accessibility-statement-link:hover,
+.accessibility-statement-link:focus {
+    background: #f8f8f8;
+}
+
+/* Accessibility States */
+body.high-contrast {
+    filter: contrast(1.5);
+}
+
+body.high-contrast * {
+    text-shadow: none !important;
+}
+
+body.highlight-links a {
+    outline: 2px solid #ff6b35 !important;
+    outline-offset: 2px !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .accessibility-toolbar {
+        left: 10px;
+        top: 80px;
+    }
+    
+    .accessibility-toggle {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .accessibility-toggle svg {
+        width: 24px;
+        height: 24px;
+    }
+}
