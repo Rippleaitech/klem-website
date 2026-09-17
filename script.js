@@ -79,19 +79,44 @@ managedItems.forEach(item => {
     const hasProjectData = projectData[projectTitle];
 
     if (hasProjectData) {
-        // For projects with data (like Hadar), single click opens modal
-        item.addEventListener("click", (e) => {
-            e.preventDefault();
-            openProjectModal(projectTitle);
-        });
+        // Track touch position to distinguish tap from scroll
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchMoved = false;
 
         item.addEventListener("touchstart", (e) => {
-            e.preventDefault();
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchMoved = false;
+        });
+
+        item.addEventListener("touchmove", (e) => {
+            const touchEndX = e.touches[0].clientX;
+            const touchEndY = e.touches[0].clientY;
+            const deltaX = Math.abs(touchEndX - touchStartX);
+            const deltaY = Math.abs(touchEndY - touchStartY);
+
+            // If finger moved more than 10px, consider it scrolling
+            if (deltaX > 10 || deltaY > 10) {
+                touchMoved = true;
+            }
         });
 
         item.addEventListener("touchend", (e) => {
-            e.preventDefault();
-            openProjectModal(projectTitle);
+            // Only open project if touch didn't move (intentional tap)
+            if (!touchMoved) {
+                e.preventDefault();
+                openProjectModal(projectTitle);
+            }
+        });
+
+        // Desktop click behavior remains unchanged
+        item.addEventListener("click", (e) => {
+            // Only handle click if it's not from touch
+            if (e.pointerType === "mouse" || !e.pointerType) {
+                e.preventDefault();
+                openProjectModal(projectTitle);
+            }
         });
 
         // Change cursor to pointer
