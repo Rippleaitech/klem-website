@@ -330,6 +330,12 @@ header {
     gap: 20px;
 }
 
+.managed-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .managed-item {
     position: relative;
     width: 100%;
@@ -442,8 +448,24 @@ header {
         align-items: start;
     }
 
+    .managed-column {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
     .managed-item {
         height: 320px;
+    }
+
+    .managed-item[data-title="שכונת הדר החדשה בגבעת שמואל"] {
+        height: auto;
+    }
+
+    .managed-item[data-title="שכונת הדר החדשה בגבעת שמואל"] img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
     }
 
     .managed-text {
@@ -456,6 +478,12 @@ header {
     .managed-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .managed-column {
+        display: flex;
+        flex-direction: column;
         gap: 20px;
     }
 
