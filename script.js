@@ -15,7 +15,10 @@ const closeMenu = () => {
 };
 
 menuButton.addEventListener("click", openMenu);
-navMenuClose.addEventListener("click", closeMenu);
+
+if (navMenuClose) {
+    navMenuClose.addEventListener("click", closeMenu);
+}
 
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && navMenu.classList.contains("active")) {
@@ -45,80 +48,84 @@ const totalSlides = slides.length;
 const SLIDE_DURATION = 800;
 const AUTOPLAY_DELAY = 3500;
 
-// A clone at each end makes the loop seamless in both directions. The track is
-// RTL, so DOM order runs right-to-left and the prepended clone sits to the
-// right of slide 0 -- hence the +1 offset applied to every position.
-slidesTrack.appendChild(slides[0].cloneNode(true));
-slidesTrack.insertBefore(slides[totalSlides - 1].cloneNode(true), slides[0]);
+// The slider only exists on the home page.
+if (slidesTrack && totalSlides > 0) {
 
-let currentSlide = 0;
-let isSliding = false;
+    // A clone at each end makes the loop seamless in both directions. The track is
+    // RTL, so DOM order runs right-to-left and the prepended clone sits to the
+    // right of slide 0 -- hence the +1 offset applied to every position.
+    slidesTrack.appendChild(slides[0].cloneNode(true));
+    slidesTrack.insertBefore(slides[totalSlides - 1].cloneNode(true), slides[0]);
 
-const positionTrack = (index, animate) => {
-    slidesTrack.style.transition = animate
-        ? `transform ${SLIDE_DURATION}ms ease-in-out`
-        : "none";
-    slidesTrack.style.transform = `translateX(${(index + 1) * 100}%)`;
-};
+    let currentSlide = 0;
+    let isSliding = false;
 
-positionTrack(currentSlide, false);
+    const positionTrack = (index, animate) => {
+        slidesTrack.style.transition = animate
+            ? `transform ${SLIDE_DURATION}ms ease-in-out`
+            : "none";
+        slidesTrack.style.transform = `translateX(${(index + 1) * 100}%)`;
+    };
 
-const goToSlide = (direction) => {
-    if (isSliding) return;
-    isSliding = true;
+    positionTrack(currentSlide, false);
 
-    const target = currentSlide + direction;
-    positionTrack(target, true);
+    const goToSlide = (direction) => {
+        if (isSliding) return;
+        isSliding = true;
 
-    setTimeout(() => {
-        if (target === totalSlides) {
-            // Landed on the trailing clone of slide 0 -- jump back silently
-            currentSlide = 0;
-            positionTrack(currentSlide, false);
-        } else if (target === -1) {
-            // Landed on the leading clone of the last slide
-            currentSlide = totalSlides - 1;
-            positionTrack(currentSlide, false);
-        } else {
-            currentSlide = target;
-        }
-        isSliding = false;
-    }, SLIDE_DURATION);
-};
+        const target = currentSlide + direction;
+        positionTrack(target, true);
 
-let autoplay = setInterval(() => goToSlide(1), AUTOPLAY_DELAY);
+        setTimeout(() => {
+            if (target === totalSlides) {
+                // Landed on the trailing clone of slide 0 -- jump back silently
+                currentSlide = 0;
+                positionTrack(currentSlide, false);
+            } else if (target === -1) {
+                // Landed on the leading clone of the last slide
+                currentSlide = totalSlides - 1;
+                positionTrack(currentSlide, false);
+            } else {
+                currentSlide = target;
+            }
+            isSliding = false;
+        }, SLIDE_DURATION);
+    };
 
-// Manual navigation restarts the timer, so the slide does not jump again
-// straight after the user has moved it themselves.
-const navigate = (direction) => {
-    goToSlide(direction);
-    clearInterval(autoplay);
-    autoplay = setInterval(() => goToSlide(1), AUTOPLAY_DELAY);
-};
+    let autoplay = setInterval(() => goToSlide(1), AUTOPLAY_DELAY);
 
-document.getElementById("sliderNext").addEventListener("click", () => navigate(1));
-document.getElementById("sliderPrev").addEventListener("click", () => navigate(-1));
+    // Manual navigation restarts the timer, so the slide does not jump again
+    // straight after the user has moved it themselves.
+    const navigate = (direction) => {
+        goToSlide(direction);
+        clearInterval(autoplay);
+        autoplay = setInterval(() => goToSlide(1), AUTOPLAY_DELAY);
+    };
 
-// Swipe. In RTL the next slide sits to the left of the current one, so
-// dragging rightwards is what pulls it into view.
-const slideshow = document.querySelector(".slideshow");
-let swipeStartX = 0;
-let swipeStartY = 0;
+    document.getElementById("sliderNext").addEventListener("click", () => navigate(1));
+    document.getElementById("sliderPrev").addEventListener("click", () => navigate(-1));
 
-slideshow.addEventListener("touchstart", (e) => {
-    swipeStartX = e.touches[0].clientX;
-    swipeStartY = e.touches[0].clientY;
-}, { passive: true });
+    // Swipe. In RTL the next slide sits to the left of the current one, so
+    // dragging rightwards is what pulls it into view.
+    const slideshow = document.querySelector(".slideshow");
+    let swipeStartX = 0;
+    let swipeStartY = 0;
 
-slideshow.addEventListener("touchend", (e) => {
-    const deltaX = e.changedTouches[0].clientX - swipeStartX;
-    const deltaY = e.changedTouches[0].clientY - swipeStartY;
+    slideshow.addEventListener("touchstart", (e) => {
+        swipeStartX = e.touches[0].clientX;
+        swipeStartY = e.touches[0].clientY;
+    }, { passive: true });
 
-    // Ignore vertical scrolling and drags too small to be intentional
-    if (Math.abs(deltaX) < 40 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+    slideshow.addEventListener("touchend", (e) => {
+        const deltaX = e.changedTouches[0].clientX - swipeStartX;
+        const deltaY = e.changedTouches[0].clientY - swipeStartY;
 
-    navigate(deltaX > 0 ? 1 : -1);
-}, { passive: true });
+        // Ignore vertical scrolling and drags too small to be intentional
+        if (Math.abs(deltaX) < 40 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+
+        navigate(deltaX > 0 ? 1 : -1);
+    }, { passive: true });
+}
 
 // Project Data
 const projectData = {
@@ -320,14 +327,18 @@ function closeProjectModal() {
 }
 
 // Close modal on overlay click
-projectModalOverlay.addEventListener("click", closeProjectModal);
+if (projectModalOverlay) {
+    projectModalOverlay.addEventListener("click", closeProjectModal);
+}
 
 // Close modal on close button click
-projectModalClose.addEventListener("click", closeProjectModal);
+if (projectModalClose) {
+    projectModalClose.addEventListener("click", closeProjectModal);
+}
 
 // Close modal on Escape key
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && projectModal.classList.contains("active")) {
+    if (e.key === "Escape" && projectModal && projectModal.classList.contains("active")) {
         closeProjectModal();
     }
 });
@@ -349,14 +360,18 @@ function closeGalleryLightbox() {
 }
 
 // Close lightbox on overlay click
-galleryLightboxOverlay.addEventListener("click", closeGalleryLightbox);
+if (galleryLightboxOverlay) {
+    galleryLightboxOverlay.addEventListener("click", closeGalleryLightbox);
+}
 
 // Close lightbox on close button click
-galleryLightboxClose.addEventListener("click", closeGalleryLightbox);
+if (galleryLightboxClose) {
+    galleryLightboxClose.addEventListener("click", closeGalleryLightbox);
+}
 
 // Close lightbox on Escape key
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && galleryLightbox.classList.contains("active")) {
+    if (e.key === "Escape" && galleryLightbox && galleryLightbox.classList.contains("active")) {
         closeGalleryLightbox();
     }
 });

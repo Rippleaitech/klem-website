@@ -1075,6 +1075,146 @@ a.contact-detail-value:hover {
     }
 }
 
+/* CONTENT PAGES (services, about)
+   Hairline separators and generous vertical rhythm, no cards or boxes. */
+
+.content-page {
+    background-color: #F7F7F5;
+    padding: 64px 24px 88px;
+    direction: rtl;
+}
+
+.content-container {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+.content-head {
+    text-align: center;
+    margin-bottom: 56px;
+}
+
+.content-head h1 {
+    font-size: 32px;
+    line-height: 1.25;
+    color: #26343B;
+}
+
+/* Same small hairline used under the wordmark in the contact area */
+.content-head h1::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: #DCE2E3;
+    margin: 26px auto 0;
+}
+
+.content-block {
+    padding: 34px 0;
+    border-bottom: 1px solid #DCE2E3;
+}
+
+.content-block:last-of-type {
+    border-bottom: none;
+}
+
+.content-block h2 {
+    font-size: 21px;
+    color: #26343B;
+    margin-bottom: 14px;
+}
+
+.content-block p {
+    font-size: 18px;
+    line-height: 1.9;
+    color: #687177;
+}
+
+/* About page reads as continuous prose, so no separators between paragraphs */
+.content-prose p {
+    font-size: 18px;
+    line-height: 1.9;
+    color: #687177;
+    margin-bottom: 22px;
+}
+
+.content-cta-wrap {
+    margin-top: 56px;
+    text-align: center;
+}
+
+.content-cta {
+    display: inline-block;
+    padding: 18px 44px;
+
+    background: #26343B;
+    color: white;
+    text-decoration: none;
+
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: 0.04em;
+    border-radius: 10px;
+    transition: background 0.2s;
+}
+
+.content-cta:hover {
+    background: #162025;
+}
+
+.content-back {
+    margin-top: 48px;
+    text-align: center;
+}
+
+.content-back a {
+    font-size: 15px;
+    color: #687177;
+    text-decoration: none;
+}
+
+.content-back a:hover {
+    text-decoration: underline;
+}
+
+@media (min-width: 481px) {
+    .content-head h1 {
+        font-size: 40px;
+    }
+
+    .content-block h2 {
+        font-size: 23px;
+    }
+}
+
+@media (min-width: 769px) {
+    .content-page {
+        padding: 90px 50px 110px;
+    }
+
+    .content-head {
+        margin-bottom: 68px;
+    }
+
+    .content-head h1 {
+        font-size: 46px;
+    }
+
+    .content-block {
+        padding: 40px 0;
+    }
+
+    .content-block h2 {
+        font-size: 24px;
+    }
+
+    .content-block p,
+    .content-prose p {
+        font-size: 19px;
+    }
+}
+
 /* PROJECT MODAL */
 
 .project-modal {
