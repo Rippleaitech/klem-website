@@ -15,28 +15,85 @@ menuButton.addEventListener("click", () => {
 
 const slidesTrack = document.getElementById("slidesTrack");
 const slides = document.querySelectorAll(".slide");
-
-const firstSlideClone = slides[0].cloneNode(true);
-slidesTrack.appendChild(firstSlideClone);
-
-let currentSlide = 0;
 const totalSlides = slides.length;
 
-setInterval(() => {
-    currentSlide++;
+const SLIDE_DURATION = 800;
+const AUTOPLAY_DELAY = 3500;
 
-    slidesTrack.style.transition = "transform 0.8s ease-in-out";
-    slidesTrack.style.transform = `translateX(${currentSlide * 100}%)`;
+// A clone at each end makes the loop seamless in both directions. The track is
+// RTL, so DOM order runs right-to-left and the prepended clone sits to the
+// right of slide 0 -- hence the +1 offset applied to every position.
+slidesTrack.appendChild(slides[0].cloneNode(true));
+slidesTrack.insertBefore(slides[totalSlides - 1].cloneNode(true), slides[0]);
 
-    if (currentSlide === totalSlides) {
-        setTimeout(() => {
-            slidesTrack.style.transition = "none";
+let currentSlide = 0;
+let isSliding = false;
+
+const positionTrack = (index, animate) => {
+    slidesTrack.style.transition = animate
+        ? `transform ${SLIDE_DURATION}ms ease-in-out`
+        : "none";
+    slidesTrack.style.transform = `translateX(${(index + 1) * 100}%)`;
+};
+
+positionTrack(currentSlide, false);
+
+const goToSlide = (direction) => {
+    if (isSliding) return;
+    isSliding = true;
+
+    const target = currentSlide + direction;
+    positionTrack(target, true);
+
+    setTimeout(() => {
+        if (target === totalSlides) {
+            // Landed on the trailing clone of slide 0 -- jump back silently
             currentSlide = 0;
-            slidesTrack.style.transform = "translateX(0)";
-        }, 800);
-    }
+            positionTrack(currentSlide, false);
+        } else if (target === -1) {
+            // Landed on the leading clone of the last slide
+            currentSlide = totalSlides - 1;
+            positionTrack(currentSlide, false);
+        } else {
+            currentSlide = target;
+        }
+        isSliding = false;
+    }, SLIDE_DURATION);
+};
 
-}, 3500);
+let autoplay = setInterval(() => goToSlide(1), AUTOPLAY_DELAY);
+
+// Manual navigation restarts the timer, so the slide does not jump again
+// straight after the user has moved it themselves.
+const navigate = (direction) => {
+    goToSlide(direction);
+    clearInterval(autoplay);
+    autoplay = setInterval(() => goToSlide(1), AUTOPLAY_DELAY);
+};
+
+document.getElementById("sliderNext").addEventListener("click", () => navigate(1));
+document.getElementById("sliderPrev").addEventListener("click", () => navigate(-1));
+
+// Swipe. In RTL the next slide sits to the left of the current one, so
+// dragging rightwards is what pulls it into view.
+const slideshow = document.querySelector(".slideshow");
+let swipeStartX = 0;
+let swipeStartY = 0;
+
+slideshow.addEventListener("touchstart", (e) => {
+    swipeStartX = e.touches[0].clientX;
+    swipeStartY = e.touches[0].clientY;
+}, { passive: true });
+
+slideshow.addEventListener("touchend", (e) => {
+    const deltaX = e.changedTouches[0].clientX - swipeStartX;
+    const deltaY = e.changedTouches[0].clientY - swipeStartY;
+
+    // Ignore vertical scrolling and drags too small to be intentional
+    if (Math.abs(deltaX) < 40 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+
+    navigate(deltaX > 0 ? 1 : -1);
+}, { passive: true });
 
 // Project Data
 const projectData = {

@@ -128,8 +128,9 @@ header {
 }
 
 .hero-content h1 {
-    font-size: 28px;
-    letter-spacing: 0;
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: 3px;
     line-height: 1;
     margin-bottom: 4px;
     padding: 0 20px;
@@ -203,16 +204,67 @@ header {
 }
 
 .section-title h2 {
-    /* "בניינים בניהול KLEMENTINA" renders 423px wide at 34px, so it needs a
-       471px viewport to stay on one line. Scale down on narrower screens and
-       cap at the original 34px, which it reaches from 500px up. */
-    font-size: clamp(20px, calc(7.6vw - 4px), 34px);
+    /* "בניינים בניהול KLEMENTINA" renders 382px wide at 34px (the brand span is
+       0.7em), so it needs a 430px viewport to stay on one line. Scale down on
+       narrower screens and cap at 34px, which it reaches from 458px up. */
+    font-size: clamp(20px, calc(8.3vw - 4px), 34px);
     color: #26343B;
 }
 
 .slideshow {
+    position: relative;
     width: 100%;
     overflow: hidden;
+}
+
+/* SLIDER MANUAL NAVIGATION
+   Thin light chevrons, no button chrome. 48px tap target on mobile, inset
+   from the edges. The drop-shadow keeps the 1.5px stroke readable when the
+   slide underneath is bright. */
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+
+    width: 48px;
+    height: 48px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.slider-arrow:hover,
+.slider-arrow:focus-visible {
+    opacity: 1;
+}
+
+.slider-arrow svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: #F7F7F5;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.55));
+}
+
+.slider-arrow-prev {
+    left: 12px;
+}
+
+.slider-arrow-next {
+    right: 12px;
 }
 
 .slides-track {
@@ -288,8 +340,7 @@ header {
     }
 
     .hero-content h1 {
-        font-size: 42px;
-        letter-spacing: 0;
+        font-size: 38px;
     }
 
     .slide {
@@ -301,6 +352,19 @@ header {
         right: 40px;
         bottom: 35px;
     }
+
+    .slider-arrow svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .slider-arrow-prev {
+        left: 24px;
+    }
+
+    .slider-arrow-next {
+        right: 24px;
+    }
 }
 
 /* MANAGED BUILDINGS SECTION */
@@ -310,7 +374,14 @@ header {
     padding: 70px 24px;
 }
 
-.highlight-klem {
+/* BRAND WORDMARK
+   KLEMENTINA sitting inside a Hebrew heading: 30% smaller than the heading it
+   belongs to, light weight and letter-spaced so it reads as a refined brand
+   mark rather than competing with the Hebrew as the dominant title. */
+.brand-name {
+    font-size: 0.7em;
+    font-weight: 400;
+    letter-spacing: 3px;
     color: #89A9B6;
 }
 
@@ -410,8 +481,7 @@ header {
     }
 
     .hero-content h1 {
-        font-size: 56px;
-        letter-spacing: 0;
+        font-size: 50px;
         margin-bottom: 0;
     }
 
@@ -423,6 +493,24 @@ header {
         font-size: 38px;
         right: 70px;
         bottom: 50px;
+    }
+
+    .slider-arrow {
+        width: 56px;
+        height: 56px;
+    }
+
+    .slider-arrow svg {
+        width: 34px;
+        height: 34px;
+    }
+
+    .slider-arrow-prev {
+        left: 40px;
+    }
+
+    .slider-arrow-next {
+        right: 40px;
     }
 
     .managed-grid {
@@ -581,13 +669,15 @@ header {
     color: #26343B;
 }
 
-/* Subtle brand element in the blue-grey */
+/* Subtle brand element in the blue-grey. text-indent is half the
+   letter-spacing, compensating for the trailing space so the word
+   sits optically centred. */
 .contact-brand {
     direction: ltr;
     font-size: 17px;
     font-weight: 400;
-    letter-spacing: 0.32em;
-    text-indent: 0.16em;
+    letter-spacing: 3px;
+    text-indent: 1.5px;
     color: #89A9B6;
     margin-bottom: 52px;
 }
