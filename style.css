@@ -379,6 +379,14 @@ header {
     transform: scale(1.05);
 }
 
+@media (max-width: 768px) {
+    .managed-item[data-title="שכונת נאות אריאל שרון בקריית אונו"] img {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+    }
+}
+
 /* DESKTOP */
 
 @media (min-width: 769px) {

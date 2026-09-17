@@ -64,7 +64,10 @@ const projectData = {
         title: "אלוני בורכוב, רמת גן",
         text: ``,
         cover: "images/Aloni_Borochov_Cover.jpeg",
-        gallery: []
+        gallery: [
+            "images/Aloni_Borochov_1.jpeg",
+            "images/Aloni_Borochov_2.jpeg"
+        ]
     }
 };
 
