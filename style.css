@@ -129,7 +129,8 @@ header {
 .hero-content h1 {
     font-size: 28px;
     letter-spacing: 0;
-    margin-bottom: 12px;
+    line-height: 1;
+    margin-bottom: 4px;
     padding: 0 20px;
     color: #F2B36D;
     text-shadow:
@@ -145,6 +146,7 @@ header {
 
 .hero-content p {
     font-size: 18px;
+    line-height: 1.1;
     color: #F2B36D;
     text-shadow:
         -2px -2px 0 #000,
@@ -422,6 +424,7 @@ header {
     .hero-content h1 {
         font-size: 56px;
         letter-spacing: 0;
+        margin-bottom: 0;
     }
 
     .slide {
