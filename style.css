@@ -348,7 +348,8 @@ header {
 }
 
 .managed-item[data-title="שכונת הדר החדשה בגבעת שמואל"] img {
-    object-fit: contain;
+    object-fit: cover;
+    object-position: center center;
 }
 
 .managed-item[data-title="שכונת נאות אריאל שרון בקריית אונו"] img {
