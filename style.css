@@ -875,6 +875,59 @@ header {
     background: #162025;
 }
 
+/* CONTACT DETAILS
+   Separated by a hairline rather than a box. Stacked and centred by default;
+   becomes a single row on desktop, where the container is wide enough. */
+.contact-details {
+    margin-top: 48px;
+    padding-top: 40px;
+    border-top: 1px solid #DCE2E3;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 34px;
+}
+
+.contact-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.contact-detail-icon {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: #687177;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.contact-detail-label {
+    font-size: 13px;
+    color: #687177;
+    letter-spacing: 0.06em;
+}
+
+.contact-detail-value {
+    font-size: 17px;
+    color: #26343B;
+    text-decoration: none;
+}
+
+/* Phone and email are the two links; ltr keeps the digits and the address
+   from being reordered by the surrounding RTL context. */
+a.contact-detail-value {
+    direction: ltr;
+}
+
+a.contact-detail-value:hover {
+    text-decoration: underline;
+}
+
 /* Tablet */
 
 @media (min-width: 481px) {
@@ -910,6 +963,16 @@ header {
     .contact-tagline {
         font-size: 16px;
         margin-bottom: 64px;
+    }
+
+    /* The three details total ~427px, so they fit the 600px container in a
+       row. flex-wrap is a safety net if a fallback font runs wider. */
+    .contact-details {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 44px;
     }
 }
 
