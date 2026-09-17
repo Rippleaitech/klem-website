@@ -9,7 +9,8 @@
 body {
     font-family: Arial, sans-serif;
     direction: rtl;
-    background-color: white;
+    background-color: #F7F7F5;
+    color: #26343B;
 }
 
 /* HEADER */
@@ -25,7 +26,7 @@ header {
     padding: 0 18px;
 
     background: white;
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid #DCE2E3;
 
     position: relative;
     z-index: 10000;
@@ -43,7 +44,7 @@ header {
     border: none;
     background: none;
     cursor: pointer;
-    color: #111111;
+    color: #26343B;
     line-height: 1;
 }
 
@@ -58,7 +59,7 @@ header {
     right: 0;
 
     background: white;
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid #DCE2E3;
 
     z-index: 9999;
 }
@@ -70,23 +71,23 @@ header {
 .nav-menu a {
     display: block;
     text-decoration: none;
-    color: #222222;
+    color: #26343B;
     text-align: right;
     padding: 14px 18px;
     font-size: 16px;
     font-weight: bold;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid #DCE2E3;
 }
 
 .nav-menu a.active {
-    background: #fff3e8;
-    color: #e67e22;
-    border-right: 5px solid #e67e22;
+    background: rgba(137, 169, 182, 0.14);
+    color: #26343B;
+    border-right: 5px solid #89A9B6;
 }
 
 .nav-menu a:hover {
-    background: #fff8f1;
-    color: #e67e22;
+    background: rgba(137, 169, 182, 0.08);
+    color: #26343B;
 }
 
 /* HERO */
@@ -132,37 +133,21 @@ header {
     line-height: 1;
     margin-bottom: 4px;
     padding: 0 20px;
-    color: #F2B36D;
-    text-shadow:
-        -2px -2px 0 #000,
-        2px -2px 0 #000,
-        -2px 2px 0 #000,
-        2px 2px 0 #000,
-        -2px 0 0 #000,
-        2px 0 0 #000,
-        0 -2px 0 #000,
-        0 2px 0 #000;
+    color: #F7F7F5;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
 }
 
 .hero-content p {
     font-size: 18px;
     line-height: 1.1;
-    color: #F2B36D;
-    text-shadow:
-        -2px -2px 0 #000,
-        2px -2px 0 #000,
-        -2px 2px 0 #000,
-        2px 2px 0 #000,
-        -2px 0 0 #000,
-        2px 0 0 #000,
-        0 -2px 0 #000,
-        0 2px 0 #000;
+    color: #F7F7F5;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
 }
 
 /* ABOUT */
 
 .about-section {
-    background-color: white;
+    background-color: #F7F7F5;
     padding: 70px 24px;
 }
 
@@ -174,14 +159,14 @@ header {
 
 .about-container h2 {
     font-size: 34px;
-    color: #222222;
+    color: #26343B;
     margin-bottom: 28px;
 }
 
 .about-container p {
     font-size: 19px;
     line-height: 1.9;
-    color: #444444;
+    color: #687177;
     margin-bottom: 18px;
 }
 
@@ -190,7 +175,7 @@ header {
     margin-top: 24px;
     padding: 14px 32px;
 
-    background-color: #e67e22;
+    background-color: #89A9B6;
     color: white;
 
     text-decoration: none;
@@ -201,7 +186,7 @@ header {
 }
 
 .about-button:hover {
-    background-color: #cf6f1c;
+    background-color: #7898A5;
 }
 
 /* BUILDINGS SLIDESHOW */
@@ -222,7 +207,7 @@ header {
        471px viewport to stay on one line. Scale down on narrower screens and
        cap at the original 34px, which it reaches from 500px up. */
     font-size: clamp(20px, calc(7.6vw - 4px), 34px);
-    color: #222222;
+    color: #26343B;
 }
 
 .slideshow {
@@ -326,7 +311,7 @@ header {
 }
 
 .highlight-klem {
-    color: #AEC6CF;
+    color: #89A9B6;
 }
 
 .managed-grid {
@@ -491,8 +476,9 @@ header {
 
 /* STATISTICS SECTION */
 
+/* Dark charcoal band */
 .statistics-section {
-    background: linear-gradient(rgba(174, 198, 207, 0.15), rgba(174, 198, 207, 0.15));
+    background-color: #26343B;
     padding: 80px 24px;
 }
 
@@ -511,15 +497,16 @@ header {
 .stat-number {
     font-size: 56px;
     font-weight: bold;
-    color: #AEC6CF;
+    color: #F7F7F5;
     margin-bottom: 12px;
     line-height: 1;
 }
 
 .stat-label {
-    font-size: 22px;
-    color: #333333;
-    font-weight: 600;
+    font-size: 15px;
+    color: #89A9B6;
+    font-weight: normal;
+    letter-spacing: 0.08em;
 }
 
 /* Tablet */
@@ -535,7 +522,7 @@ header {
     }
 
     .stat-label {
-        font-size: 24px;
+        font-size: 16px;
     }
 }
 
@@ -550,7 +537,7 @@ header {
     }
 
     .stat-label {
-        font-size: 26px;
+        font-size: 17px;
     }
 }
 
@@ -566,14 +553,14 @@ header {
     overflow: hidden;
 }
 
-/* Light veil so the form stays readable over the building photo */
+/* Off-white veil so the form stays readable over the building photo */
 .contact-overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(255, 255, 255, 0.74),
-        rgba(255, 255, 255, 0.88)
+        rgba(247, 247, 245, 0.80),
+        rgba(247, 247, 245, 0.92)
     );
 }
 
@@ -583,7 +570,7 @@ header {
     max-width: 560px;
     margin: 0 auto;
     text-align: center;
-    color: #1F2A30;
+    color: #26343B;
 }
 
 .contact-container h2 {
@@ -591,17 +578,17 @@ header {
     line-height: 1.05;
     margin-bottom: 10px;
     font-weight: bold;
-    color: #1F2A30;
+    color: #26343B;
 }
 
-/* Brand blue-grey, darkened for legibility on the light veil */
+/* Subtle brand element in the blue-grey */
 .contact-brand {
     direction: ltr;
     font-size: 17px;
     font-weight: 400;
     letter-spacing: 0.32em;
     text-indent: 0.16em;
-    color: #4E7684;
+    color: #89A9B6;
     margin-bottom: 52px;
 }
 
@@ -617,7 +604,7 @@ header {
 
 .contact-field label {
     display: block;
-    color: #4A5560;
+    color: #687177;
     font-size: 14px;
     font-weight: normal;
     margin-bottom: 8px;
@@ -626,16 +613,15 @@ header {
 .contact-field input,
 .contact-field textarea {
     width: 100%;
-    border: 1px solid rgba(31, 42, 48, 0.12);
-    background: rgba(255, 255, 255, 0.92);
-    color: #1F1F1F;
+    border: 1px solid #DCE2E3;
+    background: white;
+    color: #26343B;
     font-size: 17px;
     padding: 15px 16px;
     border-radius: 10px;
     outline: none;
     font-family: Arial, sans-serif;
-    box-shadow: 0 1px 3px rgba(31, 42, 48, 0.05);
-    transition: border-color 0.2s, background 0.2s;
+    transition: border-color 0.2s;
 }
 
 .contact-field textarea {
@@ -645,8 +631,7 @@ header {
 
 .contact-field input:focus,
 .contact-field textarea:focus {
-    border-color: #4E7684;
-    background: rgba(255, 255, 255, 0.96);
+    border-color: #89A9B6;
 }
 
 .contact-button {
@@ -654,8 +639,8 @@ header {
     width: 100%;
     margin-top: 10px;
     padding: 17px 0;
-    background: #F2B36D;
-    color: #1F2A30;
+    background: #89A9B6;
+    color: white;
     border: none;
     border-radius: 10px;
     font-size: 19px;
@@ -667,17 +652,7 @@ header {
 }
 
 .contact-button:hover {
-    background: #E7A257;
-}
-
-/* Footer links sit inside the contact area, so they follow its light theme */
-.contact-container .footer-links {
-    color: #4A5560;
-}
-
-.contact-container .footer-links a,
-.contact-container .footer-links span {
-    color: #4A5560;
+    background: #7898A5;
 }
 
 /* Tablet */
@@ -719,13 +694,13 @@ header {
 .footer-links {
     margin-top: 45px;
     text-align: center;
-    color: #AEC6CF;
+    color: #687177;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .footer-links a {
-    color: #AEC6CF;
+    color: #687177;
     text-decoration: none;
     margin: 0 8px;
 }
@@ -735,7 +710,7 @@ header {
 }
 
 .footer-links span {
-    color: #AEC6CF;
+    color: #DCE2E3;
 }
 
 @media (max-width: 480px) {
@@ -748,7 +723,7 @@ header {
 /* LEGAL PAGES */
 
 .legal-page {
-    background: white;
+    background: #F7F7F5;
     padding: 70px 24px;
     direction: rtl;
 }
@@ -760,14 +735,14 @@ header {
 
 .legal-container h1 {
     font-size: 38px;
-    color: #222222;
+    color: #26343B;
     text-align: center;
     margin-bottom: 45px;
 }
 
 .legal-content h2 {
     font-size: 24px;
-    color: #AEC6CF;
+    color: #26343B;
     margin-top: 36px;
     margin-bottom: 14px;
 }
@@ -775,7 +750,7 @@ header {
 .legal-content p {
     font-size: 18px;
     line-height: 1.9;
-    color: #444444;
+    color: #687177;
     margin-bottom: 16px;
 }
 
@@ -783,8 +758,8 @@ header {
     display: inline-block;
     margin-top: 40px;
     padding: 14px 32px;
-    background-color: #AEC6CF;
-    color: #111111;
+    background-color: #89A9B6;
+    color: white;
     text-decoration: none;
     font-size: 18px;
     font-weight: bold;
@@ -792,7 +767,7 @@ header {
 }
 
 .back-home-button:hover {
-    background-color: #98b7c2;
+    background-color: #7898A5;
 }
 
 @media (min-width: 769px) {
@@ -850,7 +825,7 @@ header {
     position: absolute;
     top: 16px;
     left: 16px;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(38, 52, 59, 0.75);
     color: white;
     border: none;
     width: 40px;
@@ -866,7 +841,7 @@ header {
 }
 
 .project-modal-close:hover {
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(38, 52, 59, 0.92);
 }
 
 .project-modal-inner {
@@ -876,7 +851,7 @@ header {
 
 .project-modal-title {
     font-size: 32px;
-    color: #222222;
+    color: #26343B;
     text-align: center;
     margin-bottom: 28px;
     padding-top: 20px;
@@ -885,7 +860,7 @@ header {
 .project-modal-text {
     font-size: 18px;
     line-height: 1.9;
-    color: #444444;
+    color: #687177;
     margin-bottom: 40px;
     text-align: right;
 }
@@ -1001,7 +976,7 @@ header {
     top: 20px;
     left: 20px;
     background: rgba(255, 255, 255, 0.9);
-    color: #111111;
+    color: #26343B;
     border: none;
     width: 50px;
     height: 50px;
