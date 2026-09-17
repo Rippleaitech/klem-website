@@ -347,9 +347,14 @@ header {
     transition: transform 0.3s ease;
 }
 
+.managed-item[data-title="שכונת הדר החדשה בגבעת שמואל"] {
+    height: auto;
+}
+
 .managed-item[data-title="שכונת הדר החדשה בגבעת שמואל"] img {
-    object-fit: cover;
-    object-position: center center;
+    object-fit: contain;
+    width: 100%;
+    height: auto;
 }
 
 .managed-item[data-title="שכונת נאות אריאל שרון בקריית אונו"] img {
