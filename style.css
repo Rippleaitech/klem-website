@@ -32,7 +32,9 @@ header {
 }
 
 .logo img {
-    height: 50px;
+    width: 156px;
+    height: auto;
+    max-width: calc(100vw - 100px);
     display: block;
 }
 
@@ -275,7 +277,7 @@ header {
     }
 
     .logo img {
-        height: 55px;
+        width: 186px;
     }
 
     .menu-button {
@@ -397,7 +399,7 @@ header {
     }
 
     .logo img {
-        height: 70px;
+        width: 216px;
     }
 
     .menu-button {

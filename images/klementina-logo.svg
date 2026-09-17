@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216 56" role="img" aria-label="KLEMENTINA Property Management">
+    <style>
+        .wordmark {
+            font-family: 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+            font-weight: 300;
+            font-size: 21px;
+            fill: #1F1F1F;
+        }
+
+        .tagline {
+            font-family: 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+            font-weight: 400;
+            font-size: 8.2px;
+            fill: #5A5A5A;
+        }
+    </style>
+
+    <!-- K mark -->
+    <g fill="none" stroke-width="3">
+        <path stroke="#1F1F1F" d="M11 12.2 V44.2"/>
+        <path stroke="#9CB8C6" d="M29.5 12.2 L12 28.2 L29.5 44.2"/>
+    </g>
+
+    <!-- Wordmark -->
+    <text class="wordmark" x="48" y="29" textLength="160" lengthAdjust="spacing">KLEMENTINA</text>
+    <text class="tagline" x="48" y="42.5" textLength="160" lengthAdjust="spacing">PROPERTY MANAGEMENT</text>
+</svg>
