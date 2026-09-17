@@ -49,6 +49,12 @@ const projectData = {
             "images/lipkin_2.jpeg",
             "images/cover_ariel_sharon.jpeg"
         ]
+    },
+    "שכונת נאות אריאל שרון בקריית אונו": {
+        title: "שכונת נאות אריאל שרון | קריית אונו",
+        text: ``,
+        cover: "images/cover_ariel_sharon_1.jpeg",
+        gallery: []
     }
 };
 
