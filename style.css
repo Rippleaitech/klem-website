@@ -218,7 +218,10 @@ header {
 }
 
 .section-title h2 {
-    font-size: 34px;
+    /* "בניינים בניהול KLEMENTINA" renders 423px wide at 34px, so it needs a
+       471px viewport to stay on one line. Scale down on narrower screens and
+       cap at the original 34px, which it reaches from 500px up. */
+    font-size: clamp(20px, calc(7.6vw - 4px), 34px);
     color: #222222;
 }
 
