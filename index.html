@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +9,12 @@
 </head>
 <body>
 
+<a class="skip-link" href="#main-content">דלג לתוכן הראשי</a>
+
 <header>
 
-    <button class="menu-button" id="menuButton">
+    <button class="menu-button" id="menuButton" type="button"
+            aria-label="פתיחת תפריט הניווט" aria-expanded="false" aria-controls="navMenu">
         ☰
     </button>
 
@@ -44,6 +47,8 @@
 
 </nav>
 
+<main id="main-content">
+
 <section class="hero" id="home">
 
     <video autoplay muted loop playsinline>
@@ -53,7 +58,7 @@
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
-        <h1>KLEMENTINA</h1>
+        <h1 lang="en">KLEMENTINA</h1>
         <p>ניהול ואחזקה</p>
     </div>
 
@@ -63,7 +68,7 @@
 
     <div class="about-container">
 
-        <h2>ברוכים הבאים לסטנדרט של <span class="brand-name">KLEMENTINA</span></h2>
+        <h2>ברוכים הבאים לסטנדרט של <span class="brand-name" lang="en">KLEMENTINA</span></h2>
 
         <p>
             מקום שבו אתם נכנסים לבניין והכול פשוט מרגיש כמו שצריך.
@@ -86,7 +91,7 @@
             זה הסטנדרט של קלמנטינה.
         </p>
 
-        <a href="#" class="about-button">לקביעת פגישת ייעוץ</a>
+        <a href="#contact" class="about-button">לקביעת פגישת ייעוץ</a>
 
     </div>
 
@@ -94,7 +99,7 @@
 
 <section class="buildings-section" id="buildings">
 
-    <div class="slideshow">
+    <div class="slideshow" role="group" aria-label="גלריית תמונות של בניינים בניהול KLEMENTINA">
 
         <div class="slides-track" id="slidesTrack">
 
@@ -138,6 +143,17 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 4 17 12 9 20"/></svg>
         </button>
 
+        <button class="slider-pause" id="sliderPause" type="button" aria-pressed="false"
+                aria-label="עצירת ההחלפה האוטומטית של התמונות">
+            <svg class="slider-pause-icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="8" y="6" width="3" height="12" rx="1"/>
+                <rect x="14" y="6" width="3" height="12" rx="1"/>
+            </svg>
+            <svg class="slider-pause-icon-play" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 6 L18 12 L9 18 Z"/>
+            </svg>
+        </button>
+
     </div>
 
 </section>
@@ -145,26 +161,29 @@
 <section class="managed-buildings-section" id="projects">
 
     <div class="section-title">
-        <h2>בניינים בניהול <span class="brand-name">KLEMENTINA</span></h2>
+        <h2>בניינים בניהול <span class="brand-name" lang="en">KLEMENTINA</span></h2>
     </div>
 
     <div class="managed-grid">
 
-        <div class="managed-item" data-title="שכונת הדר החדשה בגבעת שמואל">
+        <div class="managed-item" data-title="שכונת הדר החדשה בגבעת שמואל" role="button" tabindex="0"
+             aria-label="שכונת הדר החדשה בגבעת שמואל — פתיחת פרטי הפרויקט">
             <img src="images/cover_lipkin.jpeg" alt="שכונת הדר החדשה בגבעת שמואל">
             <div class="managed-overlay">
                 <div class="managed-text">שכונת הדר החדשה בגבעת שמואל</div>
             </div>
         </div>
 
-        <div class="managed-item" data-title="שכונת נאות אריאל שרון בקריית אונו">
+        <div class="managed-item" data-title="שכונת נאות אריאל שרון בקריית אונו" role="button" tabindex="0"
+             aria-label="שכונת נאות אריאל שרון בקריית אונו — פתיחת פרטי הפרויקט">
             <img src="images/cover_ariel_sharon_1.jpeg" alt="שכונת נאות אריאל שרון בקריית אונו">
             <div class="managed-overlay">
                 <div class="managed-text">שכונת נאות אריאל שרון בקריית אונו</div>
             </div>
         </div>
 
-        <div class="managed-item" data-title="אלוני בורכוב, רמת גן">
+        <div class="managed-item" data-title="אלוני בורכוב, רמת גן" role="button" tabindex="0"
+             aria-label="אלוני בורכוב, רמת גן — פתיחת פרטי הפרויקט">
             <img src="images/cover_alonei_borchov.jpeg" alt="אלוני בורכוב, רמת גן">
 <div class="managed-overlay">
                 <div class="managed-text">אלוני בורכוב, רמת גן</div>
@@ -200,30 +219,39 @@
     <div class="contact-container">
 
         <h2>בואו נדבר</h2>
-        <p class="contact-brand">KLEMENTINA</p>
+        <p class="contact-brand" lang="en">KLEMENTINA</p>
         <p class="contact-tagline">ניהול ואחזקה למגדלי מגורים ברמה הגבוהה ביותר</p>
 
-        <form class="contact-form">
+        <form class="contact-form" novalidate>
 
             <div class="contact-field">
                 <label for="name">שם מלא</label>
-                <input type="text" id="name" name="name">
+                <input type="text" id="name" name="name" autocomplete="name"
+                       aria-describedby="name-error">
+                <span class="field-error" id="name-error"></span>
             </div>
 
             <div class="contact-field">
                 <label for="phone">טלפון</label>
-                <input type="tel" id="phone" name="phone">
+                <input type="tel" id="phone" name="phone" autocomplete="tel"
+                       aria-describedby="phone-error">
+                <span class="field-error" id="phone-error"></span>
             </div>
 
             <div class="contact-field">
                 <label for="email">אימייל</label>
-                <input type="email" id="email" name="email">
+                <input type="email" id="email" name="email" autocomplete="email"
+                       aria-describedby="email-error">
+                <span class="field-error" id="email-error"></span>
             </div>
 
             <div class="contact-field">
                 <label for="message">ההודעה שלך</label>
-                <textarea id="message" name="message"></textarea>
+                <textarea id="message" name="message" aria-describedby="message-error"></textarea>
+                <span class="field-error" id="message-error"></span>
             </div>
+
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
 
             <button type="submit" class="contact-button">שליחה ←</button>
 
@@ -271,11 +299,15 @@
 
 </section>
 
+</main>
+
 <!-- Project Detail Modal -->
-<div class="project-modal" id="projectModal">
+<div class="project-modal" id="projectModal" role="dialog" aria-modal="true"
+     aria-labelledby="projectModalTitle" tabindex="-1">
     <div class="project-modal-overlay" id="projectModalOverlay"></div>
     <div class="project-modal-content">
-        <button class="project-modal-close" id="projectModalClose">✕</button>
+        <button class="project-modal-close" id="projectModalClose" type="button"
+                aria-label="סגירת חלון הפרויקט">✕</button>
 
         <div class="project-modal-inner">
             <h2 class="project-modal-title" id="projectModalTitle"></h2>
@@ -290,9 +322,11 @@
 </div>
 
 <!-- Gallery Lightbox -->
-<div class="gallery-lightbox" id="galleryLightbox">
+<div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true"
+     aria-label="תצוגת תמונה מוגדלת" tabindex="-1">
     <div class="gallery-lightbox-overlay" id="galleryLightboxOverlay"></div>
-    <button class="gallery-lightbox-close" id="galleryLightboxClose">✕</button>
+    <button class="gallery-lightbox-close" id="galleryLightboxClose" type="button"
+            aria-label="סגירת תצוגת התמונה">✕</button>
     <img class="gallery-lightbox-image" id="galleryLightboxImage" src="" alt="">
 </div>
 
@@ -300,7 +334,7 @@
 <a class="whatsapp-float"
    href="https://wa.me/972587222680?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%94%D7%92%D7%A2%D7%AA%D7%99%20%D7%93%D7%A8%D7%9A%20%D7%94%D7%90%D7%AA%D7%A8%20%D7%A9%D7%9C%20KLEMENTINA%20%D7%95%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A7%D7%91%D7%9C%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%9C%D7%92%D7%91%D7%99%20%D7%A9%D7%99%D7%A8%D7%95%D7%AA%D7%99%20%D7%A0%D7%99%D7%94%D7%95%D7%9C%20%D7%95%D7%90%D7%97%D7%96%D7%A7%D7%94%20%D7%9C%D7%91%D7%A0%D7%99%D7%99%D7%9F."
    target="_blank" rel="noopener"
-   aria-label="פנייה בוואטסאפ">
+   aria-label="יצירת קשר עם KLEMENTINA ב-WhatsApp">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.347-.347.52-.52.174-.174.232-.298.347-.497.116-.198.058-.371-.03-.52-.087-.148-.66-1.59-.904-2.178-.24-.579-.486-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 

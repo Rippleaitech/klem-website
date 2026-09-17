@@ -1,3 +1,26 @@
+// Keeps Tab inside an open overlay, so keyboard users cannot wander into the
+// page behind it. Shared by the menu, the project dialog and the lightbox.
+const FOCUSABLE = 'a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])';
+
+const trapFocus = (container, e) => {
+    if (e.key !== "Tab") return;
+
+    const items = [...container.querySelectorAll(FOCUSABLE)]
+        .filter((el) => el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+    if (!items.length) return;
+
+    const first = items[0];
+    const last = items[items.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+    }
+};
+
 const menuButton = document.getElementById("menuButton");
 const navMenu = document.getElementById("navMenu");
 const navMenuClose = document.getElementById("navMenuClose");
@@ -7,23 +30,32 @@ const MENU_TRANSITION = 250; // keep in sync with the .nav-menu transition
 const openMenu = () => {
     navMenu.classList.add("active");
     document.body.style.overflow = "hidden";
+    menuButton.setAttribute("aria-expanded", "true");
+    // Move focus into the panel so the next Tab stays inside it
+    if (navMenuClose) navMenuClose.focus();
 };
 
-const closeMenu = () => {
+const closeMenu = ({ restoreFocus = true } = {}) => {
     navMenu.classList.remove("active");
     document.body.style.overflow = "";
+    menuButton.setAttribute("aria-expanded", "false");
+    if (restoreFocus) menuButton.focus();
 };
 
 menuButton.addEventListener("click", openMenu);
 
 if (navMenuClose) {
-    navMenuClose.addEventListener("click", closeMenu);
+    navMenuClose.addEventListener("click", () => closeMenu());
 }
 
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && navMenu.classList.contains("active")) {
+    if (!navMenu.classList.contains("active")) return;
+
+    if (e.key === "Escape") {
         closeMenu();
+        return;
     }
+    trapFocus(navMenu, e);
 });
 
 // Close the menu first, then scroll -- otherwise the scroll happens behind
@@ -34,9 +66,13 @@ navMenu.querySelectorAll('a[href^="#"]').forEach((link) => {
         if (!target) return;
 
         e.preventDefault();
-        closeMenu();
+        // Focus follows the jump rather than returning to the hamburger, so a
+        // keyboard or screen-reader user lands in the section they picked.
+        closeMenu({ restoreFocus: false });
         setTimeout(() => {
             target.scrollIntoView({ behavior: "smooth", block: "start" });
+            target.setAttribute("tabindex", "-1");
+            target.focus({ preventScroll: true });
         }, MENU_TRANSITION + 10);
     });
 });
@@ -92,18 +128,57 @@ if (slidesTrack && totalSlides > 0) {
         }, SLIDE_DURATION);
     };
 
-    let autoplay = setInterval(() => goToSlide(1), AUTOPLAY_DELAY);
+    // WCAG 2.2.2: the carousel moves on its own, so it needs a way to stop it.
+    // A reduced-motion preference starts it paused.
+    const prefersReducedMotion =
+        window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let autoplay = null;
+    let isPaused = prefersReducedMotion;
+
+    const startAutoplay = () => {
+        clearInterval(autoplay);
+        autoplay = setInterval(() => goToSlide(1), AUTOPLAY_DELAY);
+    };
+
+    const stopAutoplay = () => {
+        clearInterval(autoplay);
+        autoplay = null;
+    };
+
+    if (!isPaused) startAutoplay();
 
     // Manual navigation restarts the timer, so the slide does not jump again
     // straight after the user has moved it themselves.
     const navigate = (direction) => {
         goToSlide(direction);
-        clearInterval(autoplay);
-        autoplay = setInterval(() => goToSlide(1), AUTOPLAY_DELAY);
+        if (!isPaused) startAutoplay();
     };
 
     document.getElementById("sliderNext").addEventListener("click", () => navigate(1));
     document.getElementById("sliderPrev").addEventListener("click", () => navigate(-1));
+
+    const sliderPause = document.getElementById("sliderPause");
+
+    const reflectPauseState = () => {
+        sliderPause.setAttribute("aria-pressed", String(isPaused));
+        sliderPause.setAttribute(
+            "aria-label",
+            isPaused
+                ? "הפעלת ההחלפה האוטומטית של התמונות"
+                : "עצירת ההחלפה האוטומטית של התמונות"
+        );
+    };
+
+    if (sliderPause) {
+        reflectPauseState();
+        sliderPause.addEventListener("click", () => {
+            isPaused = !isPaused;
+            if (isPaused) stopAutoplay();
+            else startAutoplay();
+            reflectPauseState();
+        });
+    }
 
     // Swipe. In RTL the next slide sits to the left of the current one, so
     // dragging rightwards is what pulls it into view.
@@ -212,6 +287,15 @@ managedItems.forEach(item => {
             }
         });
 
+        // The card carries role="button", so it must answer Enter and Space
+        // like a real button does.
+        item.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+                e.preventDefault();
+                openProjectModal(projectTitle);
+            }
+        });
+
         // Change cursor to pointer
         item.style.cursor = "pointer";
     } else {
@@ -279,14 +363,80 @@ if (statsSection) {
 const contactForm = document.querySelector(".contact-form");
 
 if (contactForm) {
+    const formStatus = document.getElementById("formStatus");
+
+    // Error text is written next to the field it belongs to and linked with
+    // aria-describedby, so a screen reader reads it with the field. The
+    // summary goes into a live region instead of a native alert().
+    const RULES = [
+        { id: "name", message: "יש להזין שם מלא", test: (v) => v.trim().length > 1 },
+        { id: "phone", message: "יש להזין מספר טלפון תקין", test: (v) => /^[\d\-+()\s]{9,}$/.test(v.trim()) },
+        { id: "email", message: "יש להזין כתובת אימייל תקינה", test: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+        { id: "message", message: "יש להזין הודעה", test: (v) => v.trim().length > 0 },
+    ];
+
+    const setFieldError = (field, errorEl, message) => {
+        if (message) {
+            field.setAttribute("aria-invalid", "true");
+            errorEl.textContent = message;
+            errorEl.classList.add("visible");
+        } else {
+            field.removeAttribute("aria-invalid");
+            errorEl.textContent = "";
+            errorEl.classList.remove("visible");
+        }
+    };
+
     contactForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        alert("הטופס נשלח בהצלחה");
+
+        const invalid = [];
+
+        RULES.forEach(({ id, message, test }) => {
+            const field = document.getElementById(id);
+            const errorEl = document.getElementById(`${id}-error`);
+            if (!field || !errorEl) return;
+
+            const ok = test(field.value);
+            setFieldError(field, errorEl, ok ? "" : message);
+            if (!ok) invalid.push(field);
+        });
+
+        if (invalid.length) {
+            formStatus.textContent = `הטופס לא נשלח. יש לתקן ${invalid.length} שדות ולנסות שוב.`;
+            invalid[0].focus();
+            return;
+        }
+
+        formStatus.textContent = "הטופס נשלח בהצלחה. ניצור איתכם קשר בהקדם.";
         contactForm.reset();
+    });
+
+    // Clear a field's error as soon as it becomes valid
+    RULES.forEach(({ id, test }) => {
+        const field = document.getElementById(id);
+        const errorEl = document.getElementById(`${id}-error`);
+        if (!field || !errorEl) return;
+
+        field.addEventListener("input", () => {
+            if (field.getAttribute("aria-invalid") === "true" && test(field.value)) {
+                setFieldError(field, errorEl, "");
+            }
+        });
     });
 }
 
 // Project Modal Functions
+let lastFocusedBeforeDialog = null;
+let lastFocusedBeforeLightbox = null;
+
+const restoreFocusAfterDialog = () => {
+    if (lastFocusedBeforeDialog) {
+        lastFocusedBeforeDialog.focus();
+        lastFocusedBeforeDialog = null;
+    }
+};
+
 const projectModal = document.getElementById("projectModal");
 const projectModalOverlay = document.getElementById("projectModalOverlay");
 const projectModalClose = document.getElementById("projectModalClose");
@@ -312,18 +462,30 @@ function openProjectModal(projectKey) {
         const img = document.createElement("img");
         img.src = imgSrc;
         img.alt = `${project.title} - תמונה ${index + 1}`;
+        img.setAttribute("role", "button");
+        img.setAttribute("tabindex", "0");
+        img.setAttribute("aria-label", `${project.title} - הגדלת תמונה ${index + 1}`);
         img.addEventListener("click", () => openGalleryLightbox(imgSrc));
+        img.addEventListener("keydown", (ev) => {
+            if (ev.key === "Enter" || ev.key === " " || ev.key === "Spacebar") {
+                ev.preventDefault();
+                openGalleryLightbox(imgSrc);
+            }
+        });
         projectModalGallery.appendChild(img);
     });
 
     // Show modal
+    lastFocusedBeforeDialog = document.activeElement;
     projectModal.classList.add("active");
     document.body.style.overflow = "hidden";
+    projectModal.focus();
 }
 
 function closeProjectModal() {
     projectModal.classList.remove("active");
     document.body.style.overflow = "";
+    restoreFocusAfterDialog();
 }
 
 // Close modal on overlay click
@@ -338,9 +500,13 @@ if (projectModalClose) {
 
 // Close modal on Escape key
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && projectModal && projectModal.classList.contains("active")) {
+    if (!projectModal || !projectModal.classList.contains("active")) return;
+
+    if (e.key === "Escape") {
         closeProjectModal();
+        return;
     }
+    trapFocus(projectModal, e);
 });
 
 // Gallery Lightbox Functions
@@ -350,13 +516,19 @@ const galleryLightboxClose = document.getElementById("galleryLightboxClose");
 const galleryLightboxImage = document.getElementById("galleryLightboxImage");
 
 function openGalleryLightbox(imageSrc) {
+    lastFocusedBeforeLightbox = document.activeElement;
     galleryLightboxImage.src = imageSrc;
     galleryLightbox.classList.add("active");
+    galleryLightbox.focus();
 }
 
 function closeGalleryLightbox() {
     galleryLightbox.classList.remove("active");
     galleryLightboxImage.src = "";
+    if (lastFocusedBeforeLightbox) {
+        lastFocusedBeforeLightbox.focus();
+        lastFocusedBeforeLightbox = null;
+    }
 }
 
 // Close lightbox on overlay click
@@ -371,7 +543,11 @@ if (galleryLightboxClose) {
 
 // Close lightbox on Escape key
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && galleryLightbox && galleryLightbox.classList.contains("active")) {
+    if (!galleryLightbox || !galleryLightbox.classList.contains("active")) return;
+
+    if (e.key === "Escape") {
         closeGalleryLightbox();
+        return;
     }
+    trapFocus(galleryLightbox, e);
 });
