@@ -22,14 +22,29 @@
 </header>
 
 <nav class="nav-menu" id="navMenu">
-    <a href="#" class="active">עמוד הבית</a>
-    <a href="#about">אודות</a>
-    <a href="#buildings">בניינים</a>
-    <a href="#">שירותים</a>
-    <a href="#contact">צור קשר</a>
+
+    <div class="nav-menu-top">
+        <button class="nav-menu-close" id="navMenuClose" type="button" aria-label="סגירת התפריט">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18"/></svg>
+        </button>
+        <div class="nav-menu-logo">
+            <img src="images/klementina-logo.svg" alt="KLEMENTINA Property Management">
+        </div>
+    </div>
+
+    <div class="nav-menu-links">
+        <a href="#home">ראשי</a>
+        <a href="#about">אודות</a>
+        <a href="#projects">בניינים בניהול</a>
+        <a href="#about">השירותים שלנו</a>
+        <a href="#contact">בואו נדבר</a>
+    </div>
+
+    <a href="#contact" class="nav-menu-cta">לקביעת פגישת ייעוץ</a>
+
 </nav>
 
-<section class="hero">
+<section class="hero" id="home">
 
     <video autoplay muted loop playsinline>
         <source src="videos/klem-hero-video.mp4" type="video/mp4">
@@ -127,7 +142,7 @@
 
 </section>
 
-<section class="managed-buildings-section">
+<section class="managed-buildings-section" id="projects">
 
     <div class="section-title">
         <h2>בניינים בניהול <span class="brand-name">KLEMENTINA</span></h2>

@@ -1,16 +1,41 @@
 const menuButton = document.getElementById("menuButton");
 const navMenu = document.getElementById("navMenu");
+const navMenuClose = document.getElementById("navMenuClose");
 
-menuButton.addEventListener("click", () => {
+const MENU_TRANSITION = 250; // keep in sync with the .nav-menu transition
 
-    navMenu.classList.toggle("active");
+const openMenu = () => {
+    navMenu.classList.add("active");
+    document.body.style.overflow = "hidden";
+};
 
-    if (navMenu.classList.contains("active")) {
-        menuButton.innerHTML = "✕";
-    } else {
-        menuButton.innerHTML = "☰";
+const closeMenu = () => {
+    navMenu.classList.remove("active");
+    document.body.style.overflow = "";
+};
+
+menuButton.addEventListener("click", openMenu);
+navMenuClose.addEventListener("click", closeMenu);
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && navMenu.classList.contains("active")) {
+        closeMenu();
     }
+});
 
+// Close the menu first, then scroll -- otherwise the scroll happens behind
+// the full-screen panel and the body is still locked.
+navMenu.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", (e) => {
+        const target = document.getElementById(link.getAttribute("href").slice(1));
+        if (!target) return;
+
+        e.preventDefault();
+        closeMenu();
+        setTimeout(() => {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, MENU_TRANSITION + 10);
+    });
 });
 
 const slidesTrack = document.getElementById("slidesTrack");

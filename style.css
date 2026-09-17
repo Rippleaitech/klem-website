@@ -50,44 +50,117 @@ header {
 
 /* MENU */
 
+/* Full-screen panel. visibility (not display) so the fade can animate.
+   Sits above the header, so it carries its own logo and close button. */
 .nav-menu {
-    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
 
-    position: absolute;
-    top: 75px;
-    left: 0;
-    right: 0;
+    background: #F7F7F5;
+    padding: 0 18px 32px;
 
-    background: white;
-    border-bottom: 1px solid #DCE2E3;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 
-    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .nav-menu.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Mirrors the header's row-reverse, so the logo stays put when the menu opens */
+.nav-menu-top {
+    flex: 0 0 auto;
+    height: 75px;
+
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-menu-logo img {
+    width: 156px;
+    height: auto;
+    max-width: calc(100vw - 100px);
     display: block;
 }
 
-.nav-menu a {
+.nav-menu-close {
+    width: 40px;
+    height: 40px;
+    margin-left: -8px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: none;
+    border: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.nav-menu-close svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: #26343B;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+}
+
+.nav-menu-links {
+    margin-top: 40px;
+}
+
+.nav-menu-links a {
     display: block;
-    text-decoration: none;
-    color: #26343B;
     text-align: right;
-    padding: 14px 18px;
-    font-size: 16px;
-    font-weight: bold;
+    text-decoration: none;
+
+    padding: 20px 0;
+    font-size: 22px;
+    font-weight: 400;
+    color: #26343B;
+
     border-bottom: 1px solid #DCE2E3;
+    transition: color 0.2s;
 }
 
-.nav-menu a.active {
-    background: rgba(137, 169, 182, 0.14);
-    color: #26343B;
-    border-right: 5px solid #89A9B6;
+.nav-menu-links a:last-child {
+    border-bottom: none;
 }
 
-.nav-menu a:hover {
-    background: rgba(137, 169, 182, 0.08);
-    color: #26343B;
+.nav-menu-links a:hover {
+    color: #687177;
+}
+
+.nav-menu-cta {
+    display: block;
+    margin-top: auto;
+    padding: 18px 0;
+
+    background: #26343B;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: 0.04em;
+    border-radius: 10px;
+}
+
+.nav-menu-cta:hover {
+    background: #162025;
 }
 
 /* HERO */
@@ -334,12 +407,20 @@ header {
     }
 
     .nav-menu {
-        top: 80px;
+        padding: 0 24px 40px;
     }
 
-    .nav-menu a {
-        padding: 16px 24px;
-        font-size: 17px;
+    .nav-menu-top {
+        height: 80px;
+    }
+
+    .nav-menu-logo img {
+        width: 186px;
+    }
+
+    .nav-menu-links a {
+        padding: 22px 0;
+        font-size: 24px;
     }
 
     .hero {
@@ -475,12 +556,36 @@ header {
     }
 
     .nav-menu {
-        top: 90px;
+        padding: 0 50px 50px;
     }
 
-    .nav-menu a {
-        padding: 18px 50px;
-        font-size: 18px;
+    .nav-menu-top {
+        height: 90px;
+    }
+
+    .nav-menu-logo img {
+        width: 216px;
+    }
+
+    /* Keep the list from stretching across a wide screen */
+    .nav-menu-links {
+        width: 100%;
+        max-width: 560px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 56px;
+    }
+
+    .nav-menu-links a {
+        padding: 24px 0;
+        font-size: 26px;
+    }
+
+    .nav-menu-cta {
+        width: 100%;
+        max-width: 560px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .hero {
