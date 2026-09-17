@@ -46,7 +46,8 @@ const projectData = {
         cover: "images/cover_lipkin.jpeg",
         gallery: [
             "images/lipkin_1.jpeg",
-            "images/lipkin_2.jpeg"
+            "images/lipkin_2.jpeg",
+            "images/cover_ariel_sharon.jpeg"
         ]
     }
 };
