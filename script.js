@@ -56,7 +56,8 @@ const projectData = {
         cover: "images/cover_ariel_sharon_1.jpeg",
         gallery: [
             "images/cover_ariel_sharon_2.jpeg",
-            "images/Ariel_Sharon_2.jpeg"
+            "images/Ariel_Sharon_2.jpeg",
+            "images/Ariel_Sharon_3.jpeg"
         ]
     }
 };
