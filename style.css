@@ -641,14 +641,14 @@ header {
     overflow: hidden;
 }
 
-/* Off-white veil so the form stays readable over the building photo */
+/* Strong white veil -- the building stays as a very faint backdrop */
 .contact-overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(247, 247, 245, 0.80),
-        rgba(247, 247, 245, 0.92)
+        rgba(255, 255, 255, 0.90),
+        rgba(255, 255, 255, 0.96)
     );
 }
 
@@ -669,17 +669,34 @@ header {
     color: #26343B;
 }
 
-/* Subtle brand element in the blue-grey. text-indent is half the
-   letter-spacing, compensating for the trailing space so the word
-   sits optically centred. */
+/* Thin charcoal wordmark. text-indent is half the letter-spacing,
+   compensating for the trailing space so the word sits optically centred.
+   The ::after is the small hairline rule beneath it. */
 .contact-brand {
     direction: ltr;
     font-size: 17px;
     font-weight: 400;
     letter-spacing: 3px;
     text-indent: 1.5px;
-    color: #89A9B6;
-    margin-bottom: 52px;
+    color: #26343B;
+    margin-bottom: 0;
+}
+
+.contact-brand::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: #DCE2E3;
+    margin: 24px auto 0;
+}
+
+.contact-tagline {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #687177;
+    margin-top: 24px;
+    margin-bottom: 56px;
 }
 
 .contact-form {
@@ -689,7 +706,7 @@ header {
 .contact-field {
     width: 100%;
     text-align: right;
-    margin-bottom: 22px;
+    margin-bottom: 26px;
 }
 
 .contact-field label {
@@ -711,6 +728,7 @@ header {
     border-radius: 10px;
     outline: none;
     font-family: Arial, sans-serif;
+    box-shadow: 0 1px 2px rgba(38, 52, 59, 0.04);
     transition: border-color 0.2s;
 }
 
@@ -721,15 +739,15 @@ header {
 
 .contact-field input:focus,
 .contact-field textarea:focus {
-    border-color: #89A9B6;
+    border-color: #26343B;
 }
 
 .contact-button {
     display: block;
     width: 100%;
-    margin-top: 10px;
-    padding: 17px 0;
-    background: #89A9B6;
+    margin-top: 14px;
+    padding: 18px 0;
+    background: #26343B;
     color: white;
     border: none;
     border-radius: 10px;
@@ -742,7 +760,7 @@ header {
 }
 
 .contact-button:hover {
-    background: #7898A5;
+    background: #162025;
 }
 
 /* Tablet */
@@ -775,7 +793,11 @@ header {
 
     .contact-brand {
         font-size: 22px;
-        margin-bottom: 60px;
+    }
+
+    .contact-tagline {
+        font-size: 16px;
+        margin-bottom: 64px;
     }
 }
 
