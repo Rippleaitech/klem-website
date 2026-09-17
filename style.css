@@ -347,6 +347,10 @@ header {
     transition: transform 0.3s ease;
 }
 
+.managed-item[data-title="שכונת הדר החדשה בגבעת שמואל"] img {
+    object-fit: contain;
+}
+
 .managed-overlay {
     position: absolute;
     inset: 0;
