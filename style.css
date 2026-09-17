@@ -1463,3 +1463,54 @@ a.contact-detail-value:hover {
     object-fit: contain;
     border-radius: 8px;
 }
+
+/* FLOATING WHATSAPP BUTTON
+   Bottom-left, because the site is RTL and the right side carries the
+   content and interactions. z-index 9000 keeps it under the header (10000),
+   the full-screen menu (10001) and the modals (10001/10002), so it can
+   never float on top of them. */
+
+.whatsapp-float {
+    position: fixed;
+    left: 18px;
+    bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+    z-index: 9000;
+
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #26343B;
+    box-shadow: 0 2px 10px rgba(38, 52, 59, 0.22);
+    transition: background 0.2s, transform 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.whatsapp-float svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
+}
+
+.whatsapp-float:hover {
+    background: #162025;
+    transform: translateY(-2px);
+}
+
+@media (min-width: 769px) {
+    .whatsapp-float {
+        left: 28px;
+        bottom: 28px;
+        width: 52px;
+        height: 52px;
+    }
+
+    .whatsapp-float svg {
+        width: 26px;
+        height: 26px;
+    }
+}
