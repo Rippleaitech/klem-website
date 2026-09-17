@@ -1131,12 +1131,42 @@ a.contact-detail-value:hover {
     color: #687177;
 }
 
-/* About page reads as continuous prose, so no separators between paragraphs */
+/* About / legal pages read as continuous prose, so no separators */
 .content-prose p {
     font-size: 18px;
     line-height: 1.9;
     color: #687177;
     margin-bottom: 22px;
+}
+
+.content-prose h2 {
+    font-size: 21px;
+    color: #26343B;
+    margin-top: 46px;
+    margin-bottom: 14px;
+}
+
+.content-prose h2:first-child {
+    margin-top: 0;
+}
+
+.content-prose a {
+    color: #26343B;
+    text-decoration: underline;
+}
+
+/* Closing notes (last updated / wording disclaimer) */
+.content-note {
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 1px solid #DCE2E3;
+}
+
+.content-note p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #687177;
+    margin-bottom: 8px;
 }
 
 .content-cta-wrap {
@@ -1212,6 +1242,10 @@ a.contact-detail-value:hover {
     .content-block p,
     .content-prose p {
         font-size: 19px;
+    }
+
+    .content-prose h2 {
+        font-size: 24px;
     }
 }
 
