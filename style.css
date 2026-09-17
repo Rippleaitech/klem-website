@@ -1669,3 +1669,341 @@ a.contact-detail-value:hover {
         transition: none !important;
     }
 }
+
+/* ===================== ACCESSIBILITY TOOLBAR ===================== */
+
+.accessibility-toolbar {
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    /* Above the WhatsApp float (9000) so the panel is never overlapped */
+    z-index: 9100;
+}
+
+.accessibility-toggle {
+    width: 50px;
+    height: 50px;
+    background: #B84A1F;
+    border: none;
+    border-radius: 50%;
+    color: #FFFFFF;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.accessibility-toggle:hover,
+.accessibility-toggle:focus-visible {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    background: #963714;
+}
+
+.accessibility-toggle svg {
+    width: 28px;
+    height: 28px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.accessibility-toggle svg circle {
+    fill: currentColor;
+    stroke: none;
+}
+
+.accessibility-menu {
+    position: absolute;
+    top: 0;
+    left: 60px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    min-width: 240px;
+    padding-bottom: 4px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+}
+
+.accessibility-toolbar.active .accessibility-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.accessibility-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #E4E4E2;
+    font-weight: 600;
+    color: #26343B;
+    font-size: 15px;
+}
+
+.accessibility-menu-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #616A70;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+}
+
+.accessibility-menu-close:hover,
+.accessibility-menu-close:focus-visible {
+    color: #B84A1F;
+}
+
+/* TEXT SIZE STEPPER */
+
+.accessibility-text-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 15px;
+    border-bottom: 1px solid #E4E4E2;
+}
+
+.accessibility-text-button {
+    min-width: 42px;
+    padding: 7px 0;
+    background: #F2F2F0;
+    border: 1px solid #DCE2E3;
+    border-radius: 6px;
+    color: #26343B;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+.accessibility-text-button:hover:not(:disabled),
+.accessibility-text-button:focus-visible:not(:disabled) {
+    background: #B84A1F;
+    border-color: #B84A1F;
+    color: #FFFFFF;
+}
+
+.accessibility-text-button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.accessibility-text-readout {
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+    color: #4A5560;
+}
+
+/* ON/OFF OPTIONS */
+
+.accessibility-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 15px;
+    background: none;
+    border: none;
+    text-align: right;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    color: #4A5560;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.accessibility-option:hover,
+.accessibility-option:focus-visible {
+    background: #F5F5F3;
+    color: #B84A1F;
+}
+
+.accessibility-option[aria-pressed="true"] {
+    background: #FBF0EB;
+    color: #963714;
+    font-weight: 600;
+}
+
+.accessibility-icon {
+    font-size: 17px;
+    width: 24px;
+    flex: 0 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.accessibility-reset {
+    border-top: 1px solid #E4E4E2;
+}
+
+.accessibility-statement-link {
+    display: block;
+    padding: 12px 15px;
+    text-align: center;
+    color: #963714;
+    text-decoration: underline;
+    border-top: 1px solid #E4E4E2;
+    font-size: 13px;
+    transition: background 0.3s;
+}
+
+.accessibility-statement-link:hover,
+.accessibility-statement-link:focus-visible {
+    background: #F5F5F3;
+}
+
+@media (max-width: 768px) {
+    .accessibility-toolbar {
+        left: 10px;
+        top: 80px;
+    }
+
+    .accessibility-toggle {
+        width: 45px;
+        height: 45px;
+    }
+
+    .accessibility-toggle svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Opening rightward would run the panel off a narrow screen */
+    .accessibility-menu {
+        top: 55px;
+        left: 0;
+        transform: translateY(-10px);
+    }
+
+    .accessibility-toolbar.active .accessibility-menu {
+        transform: translateY(0);
+    }
+}
+
+/* ===================== ACCESSIBILITY USER SETTINGS ===================== */
+
+/* Text scaling. The stylesheet sizes text in px, so a root font-size would do
+   nothing; zoom on the page regions scales text and layout together. The
+   toolbar and the WhatsApp float are left out so the controls stay put. */
+html.a11y-text-110 header,
+html.a11y-text-110 .nav-menu,
+html.a11y-text-110 main {
+    zoom: 1.10;
+}
+
+html.a11y-text-125 header,
+html.a11y-text-125 .nav-menu,
+html.a11y-text-125 main {
+    zoom: 1.25;
+}
+
+/* High contrast: a real colour override rather than a contrast() filter,
+   which would only deepen the existing low-contrast pairings. */
+html.a11y-contrast body {
+    background: #FFFFFF;
+    color: #000000;
+}
+
+html.a11y-contrast main,
+html.a11y-contrast header,
+html.a11y-contrast .nav-menu,
+html.a11y-contrast section,
+html.a11y-contrast .hero-overlay,
+html.a11y-contrast .content-page,
+html.a11y-contrast .content-container,
+html.a11y-contrast .content-note,
+html.a11y-contrast .managed-item,
+html.a11y-contrast .project-modal-content,
+html.a11y-contrast .contact-detail {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+}
+
+html.a11y-contrast h1,
+html.a11y-contrast h2,
+html.a11y-contrast h3,
+html.a11y-contrast p,
+html.a11y-contrast span,
+html.a11y-contrast li,
+html.a11y-contrast label,
+html.a11y-contrast .footer-links,
+html.a11y-contrast .contact-detail-label,
+html.a11y-contrast .contact-detail-value {
+    color: #000000 !important;
+    text-shadow: none !important;
+}
+
+html.a11y-contrast a:not(.accessibility-statement-link) {
+    color: #00429D !important;
+}
+
+html.a11y-contrast .content-cta,
+html.a11y-contrast .nav-menu-cta,
+html.a11y-contrast .contact-button {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #000000 !important;
+}
+
+html.a11y-contrast .contact-field input,
+html.a11y-contrast .contact-field textarea {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+}
+
+/* The hero video sits behind the title text; dimming it keeps the overlaid
+   text legible once the surrounding palette goes flat white. */
+html.a11y-contrast .hero video {
+    filter: grayscale(1) brightness(0.45);
+}
+
+/* Link highlighting */
+html.a11y-highlight-links a:not(.accessibility-statement-link) {
+    outline: 2px solid #B84A1F !important;
+    outline-offset: 2px !important;
+    text-decoration: underline !important;
+}
+
+/* Readable font */
+html.a11y-readable-font body,
+html.a11y-readable-font button,
+html.a11y-readable-font input,
+html.a11y-readable-font textarea {
+    font-family: Verdana, Tahoma, Arial, sans-serif !important;
+    letter-spacing: 0.02em;
+}
+
+/* Stop animations. The toolbar's own transitions are included: a user who
+   asked for motion to stop should not then watch the panel slide open. */
+html.a11y-no-motion *,
+html.a11y-no-motion *::before,
+html.a11y-no-motion *::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+}
+
+html.a11y-no-motion .accessibility-toggle:hover,
+html.a11y-no-motion .accessibility-toggle:focus-visible {
+    transform: none;
+}

@@ -448,50 +448,356 @@ if (contactForm) {
     });
 }
 
-// Accessibility Toolbar
-const accessibilityToolbar = document.createElement('div');
-accessibilityToolbar.classList.add('accessibility-toolbar');
+// Project Modal Functions
+let lastFocusedBeforeDialog = null;
+let lastFocusedBeforeLightbox = null;
 
-const accessibilityToggle = document.createElement('button');
-accessibilityToggle.classList.add('accessibility-toggle');
-// Here you can add an SVG or text to represent the toggle
-accessibilityToolbar.appendChild(accessibilityToggle);
+const restoreFocusAfterDialog = () => {
+    if (lastFocusedBeforeDialog) {
+        lastFocusedBeforeDialog.focus();
+        lastFocusedBeforeDialog = null;
+    }
+};
 
-const accessibilityMenu = document.createElement('div');
-accessibilityMenu.classList.add('accessibility-menu');
+const projectModal = document.getElementById("projectModal");
+const projectModalOverlay = document.getElementById("projectModalOverlay");
+const projectModalClose = document.getElementById("projectModalClose");
+const projectModalTitle = document.getElementById("projectModalTitle");
+const projectModalText = document.getElementById("projectModalText");
+const projectModalCover = document.getElementById("projectModalCover");
+const projectModalGallery = document.getElementById("projectModalGallery");
 
-const accessibilityMenuHeader = document.createElement('div');
-accessibilityMenuHeader.classList.add('accessibility-menu-header');
-accessibilityMenu.appendChild(accessibilityMenuHeader);
+function openProjectModal(projectKey) {
+    const project = projectData[projectKey];
+    if (!project) return;
 
-const accessibilityMenuClose = document.createElement('button');
-accessibilityMenuClose.classList.add('accessibility-menu-close');
-accessibilityMenuClose.textContent = '×';
-accessibilityMenuHeader.appendChild(accessibilityMenuClose);
+    // Set content
+    projectModalTitle.textContent = project.title;
+    projectModalText.innerHTML = project.text;
 
-accessibilityToolbar.appendChild(accessibilityMenu);
+    // Set cover image
+    projectModalCover.innerHTML = `<img src="${project.cover}" alt="${project.title}">`;
 
-document.body.appendChild(accessibilityToolbar);
+    // Set gallery images
+    projectModalGallery.innerHTML = "";
+    project.gallery.forEach((imgSrc, index) => {
+        const img = document.createElement("img");
+        img.src = imgSrc;
+        img.alt = `${project.title} - תמונה ${index + 1}`;
+        img.setAttribute("role", "button");
+        img.setAttribute("tabindex", "0");
+        img.setAttribute("aria-label", `${project.title} - הגדלת תמונה ${index + 1}`);
+        img.addEventListener("click", () => openGalleryLightbox(imgSrc));
+        img.addEventListener("keydown", (ev) => {
+            if (ev.key === "Enter" || ev.key === " " || ev.key === "Spacebar") {
+                ev.preventDefault();
+                openGalleryLightbox(imgSrc);
+            }
+        });
+        projectModalGallery.appendChild(img);
+    });
 
-// Close menu on close button click
-accessibilityMenuClose.addEventListener('click', () => {
-    accessibilityToolbar.classList.remove('active');
-});
+    // Show modal
+    lastFocusedBeforeDialog = document.activeElement;
+    projectModal.classList.add("active");
+    document.body.style.overflow = "hidden";
+    projectModal.focus();
+}
 
-// Open accessibility menu on toggle button click
-accessibilityToggle.addEventListener('click', () => {
-    accessibilityToolbar.classList.toggle('active');
-});
+function closeProjectModal() {
+    projectModal.classList.remove("active");
+    document.body.style.overflow = "";
+    restoreFocusAfterDialog();
+}
 
-// Close menu on Escape key
+// Close modal on overlay click
+if (projectModalOverlay) {
+    projectModalOverlay.addEventListener("click", closeProjectModal);
+}
+
+// Close modal on close button click
+if (projectModalClose) {
+    projectModalClose.addEventListener("click", closeProjectModal);
+}
+
+// Close modal on Escape key
 document.addEventListener("keydown", (e) => {
-    if (!accessibilityToolbar.classList.contains("active")) return;
+    if (!projectModal || !projectModal.classList.contains("active")) return;
 
     if (e.key === "Escape") {
-        accessibilityToolbar.classList.remove('active');
+        closeProjectModal();
         return;
     }
+    trapFocus(projectModal, e);
 });
+
+// ===================== ACCESSIBILITY TOOLBAR =====================
+// User-facing display adjustments, persisted across pages in localStorage.
+// The same settings are re-applied by a small inline script in each page's
+// <head>, so a saved preference is already in place before the first paint.
+
+const A11Y_STORAGE_KEY = "klem-a11y";
+
+// Text scaling uses `zoom` on the page regions rather than a root font-size,
+// because the stylesheet sizes text in px and would not respond to one. The
+// toolbar itself sits outside the zoomed regions so the controls never move.
+const A11Y_TEXT_STEPS = [
+    { className: "", label: "רגיל" },
+    { className: "a11y-text-110", label: "גדול" },
+    { className: "a11y-text-125", label: "גדול מאוד" },
+];
+
+// Each toggle maps to one class on <html>. Keep in sync with the inline
+// <head> script and the ACCESSIBILITY TOOLBAR block in style.css.
+const A11Y_TOGGLES = [
+    { key: "contrast", className: "a11y-contrast", icon: "◐", label: "ניגודיות גבוהה" },
+    { key: "links", className: "a11y-highlight-links", icon: "🔗", label: "הדגשת קישורים" },
+    { key: "font", className: "a11y-readable-font", icon: "א", label: "גופן קריא" },
+    { key: "motion", className: "a11y-no-motion", icon: "⏸", label: "עצירת אנימציות" },
+];
+
+const a11yDefaults = () => ({ text: 0, contrast: false, links: false, font: false, motion: false });
+
+const readA11ySettings = () => {
+    try {
+        const saved = JSON.parse(localStorage.getItem(A11Y_STORAGE_KEY) || "{}");
+        return { ...a11yDefaults(), ...saved };
+    } catch {
+        return a11yDefaults();
+    }
+};
+
+const writeA11ySettings = (settings) => {
+    try {
+        localStorage.setItem(A11Y_STORAGE_KEY, JSON.stringify(settings));
+    } catch {
+        // Private browsing or a full quota -- the settings still apply to this
+        // page, they just will not survive navigation.
+    }
+};
+
+let a11ySettings = readA11ySettings();
+
+// Applies the settings to <html> and pauses the hero video when motion is off.
+// The video autoplays and loops with no native control, so "stop animations"
+// is what lets a user halt it (WCAG 2.0 SC 2.2.2).
+const applyA11ySettings = () => {
+    const root = document.documentElement;
+
+    A11Y_TEXT_STEPS.forEach(({ className }) => {
+        if (className) root.classList.remove(className);
+    });
+    const step = A11Y_TEXT_STEPS[a11ySettings.text];
+    if (step && step.className) root.classList.add(step.className);
+
+    A11Y_TOGGLES.forEach(({ key, className }) => {
+        root.classList.toggle(className, Boolean(a11ySettings[key]));
+    });
+
+    document.querySelectorAll("video").forEach((video) => {
+        if (a11ySettings.motion) {
+            video.pause();
+        } else if (video.paused) {
+            video.play().catch(() => {
+                // Autoplay can be refused by the browser; nothing to recover.
+            });
+        }
+    });
+};
+
+const buildA11yToolbar = () => {
+    const toolbar = document.createElement("div");
+    toolbar.className = "accessibility-toolbar";
+
+    const toggle = document.createElement("button");
+    toggle.className = "accessibility-toggle";
+    toggle.type = "button";
+    toggle.id = "a11yToggle";
+    toggle.setAttribute("aria-label", "פתיחת תפריט נגישות");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-controls", "a11yMenu");
+    toggle.innerHTML =
+        '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+        '<circle cx="12" cy="4" r="2"/>' +
+        '<path d="M4.5 8.5h15M12 7v7m0 0l-3.5 7M12 14l3.5 7"/>' +
+        "</svg>";
+    toolbar.appendChild(toggle);
+
+    const menu = document.createElement("div");
+    menu.className = "accessibility-menu";
+    menu.id = "a11yMenu";
+    menu.setAttribute("role", "dialog");
+    menu.setAttribute("aria-label", "אפשרויות נגישות");
+
+    const header = document.createElement("div");
+    header.className = "accessibility-menu-header";
+
+    const title = document.createElement("span");
+    title.textContent = "אפשרויות נגישות";
+    header.appendChild(title);
+
+    const close = document.createElement("button");
+    close.className = "accessibility-menu-close";
+    close.type = "button";
+    close.setAttribute("aria-label", "סגירת תפריט הנגישות");
+    close.textContent = "✕";
+    header.appendChild(close);
+
+    menu.appendChild(header);
+
+    // --- text size stepper ---
+    const textRow = document.createElement("div");
+    textRow.className = "accessibility-text-row";
+
+    const decrease = document.createElement("button");
+    decrease.className = "accessibility-text-button";
+    decrease.type = "button";
+    decrease.setAttribute("aria-label", "הקטנת גודל הטקסט");
+    decrease.textContent = "‎−A";
+
+    const readout = document.createElement("span");
+    readout.className = "accessibility-text-readout";
+    readout.setAttribute("aria-live", "polite");
+
+    const increase = document.createElement("button");
+    increase.className = "accessibility-text-button";
+    increase.type = "button";
+    increase.setAttribute("aria-label", "הגדלת גודל הטקסט");
+    increase.textContent = "‎+A";
+
+    textRow.append(decrease, readout, increase);
+    menu.appendChild(textRow);
+
+    // --- on/off options ---
+    const optionButtons = A11Y_TOGGLES.map(({ key, icon, label }) => {
+        const button = document.createElement("button");
+        button.className = "accessibility-option";
+        button.type = "button";
+        button.dataset.a11yKey = key;
+
+        const iconEl = document.createElement("span");
+        iconEl.className = "accessibility-icon";
+        iconEl.setAttribute("aria-hidden", "true");
+        iconEl.textContent = icon;
+
+        const labelEl = document.createElement("span");
+        labelEl.textContent = label;
+
+        button.append(iconEl, labelEl);
+        menu.appendChild(button);
+        return button;
+    });
+
+    // --- reset ---
+    const reset = document.createElement("button");
+    reset.className = "accessibility-option accessibility-reset";
+    reset.type = "button";
+
+    const resetIcon = document.createElement("span");
+    resetIcon.className = "accessibility-icon";
+    resetIcon.setAttribute("aria-hidden", "true");
+    resetIcon.textContent = "↺";
+
+    const resetLabel = document.createElement("span");
+    resetLabel.textContent = "איפוס ההגדרות";
+
+    reset.append(resetIcon, resetLabel);
+    menu.appendChild(reset);
+
+    const statementLink = document.createElement("a");
+    statementLink.className = "accessibility-statement-link";
+    statementLink.href = "accessibility.html";
+    statementLink.textContent = "להצהרת הנגישות המלאה";
+    menu.appendChild(statementLink);
+
+    toolbar.appendChild(menu);
+    document.body.appendChild(toolbar);
+
+    // Reflects current settings onto the controls, so the panel always shows
+    // the real state -- including settings restored from a previous visit.
+    const syncControls = () => {
+        readout.textContent = A11Y_TEXT_STEPS[a11ySettings.text].label;
+        decrease.disabled = a11ySettings.text === 0;
+        increase.disabled = a11ySettings.text === A11Y_TEXT_STEPS.length - 1;
+        optionButtons.forEach((button) => {
+            const on = Boolean(a11ySettings[button.dataset.a11yKey]);
+            button.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+    };
+
+    const commit = () => {
+        applyA11ySettings();
+        writeA11ySettings(a11ySettings);
+        syncControls();
+    };
+
+    const stepText = (delta) => {
+        const next = a11ySettings.text + delta;
+        if (next < 0 || next >= A11Y_TEXT_STEPS.length) return;
+        a11ySettings.text = next;
+        commit();
+    };
+
+    decrease.addEventListener("click", () => stepText(-1));
+    increase.addEventListener("click", () => stepText(1));
+
+    optionButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const key = button.dataset.a11yKey;
+            a11ySettings[key] = !a11ySettings[key];
+            commit();
+        });
+    });
+
+    reset.addEventListener("click", () => {
+        a11ySettings = a11yDefaults();
+        commit();
+    });
+
+    const openToolbar = () => {
+        toolbar.classList.add("active");
+        toggle.setAttribute("aria-expanded", "true");
+        close.focus();
+    };
+
+    const closeToolbar = ({ restoreFocus = true } = {}) => {
+        toolbar.classList.remove("active");
+        toggle.setAttribute("aria-expanded", "false");
+        if (restoreFocus) toggle.focus();
+    };
+
+    toggle.addEventListener("click", () => {
+        if (toolbar.classList.contains("active")) {
+            closeToolbar();
+        } else {
+            openToolbar();
+        }
+    });
+
+    close.addEventListener("click", () => closeToolbar());
+
+    document.addEventListener("keydown", (e) => {
+        if (!toolbar.classList.contains("active")) return;
+
+        if (e.key === "Escape") {
+            closeToolbar();
+            return;
+        }
+        trapFocus(menu, e);
+    });
+
+    // A click anywhere else dismisses the panel, but must not steal focus back
+    // to the trigger -- that would fight the user's next click.
+    document.addEventListener("click", (e) => {
+        if (!toolbar.classList.contains("active")) return;
+        if (!toolbar.contains(e.target)) closeToolbar({ restoreFocus: false });
+    });
+
+    syncControls();
+};
+
+applyA11ySettings();
+buildA11yToolbar();
 
 // Gallery Lightbox Functions
 const galleryLightbox = document.getElementById("galleryLightbox");
@@ -536,169 +842,3 @@ document.addEventListener("keydown", (e) => {
     trapFocus(galleryLightbox, e);
 });
 
-/* Accessibility Toolbar */
-.accessibility-toolbar {
-    position: fixed;
-    top: 100px;
-    left: 20px;
-    z-index: 999;
-}
-
-.accessibility-toggle {
-    width: 50px;
-    height: 50px;
-    background: #ff6b35;
-    border: none;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.accessibility-toggle:hover,
-.accessibility-toggle:focus {
-    transform: scale(1.1);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-    background: #e55a25;
-}
-
-.accessibility-toggle svg {
-    width: 28px;
-    height: 28px;
-}
-
-.accessibility-menu {
-    position: absolute;
-    top: 0;
-    left: 60px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    min-width: 220px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-10px);
-    transition: all 0.3s ease;
-}
-
-.accessibility-toolbar.active .accessibility-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
-}
-
-.accessibility-menu-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-    font-weight: 600;
-    color: #333;
-}
-
-.accessibility-menu-close {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: #999;
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.3s;
-}
-
-.accessibility-menu-close:hover,
-.accessibility-menu-close:focus {
-    color: #ff6b35;
-}
-
-.accessibility-option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 12px 15px;
-    background: none;
-    border: none;
-    text-align: right;
-    cursor: pointer;
-    transition: background 0.3s;
-    color: #555;
-    font-size: 14px;
-}
-
-.accessibility-option:hover,
-.accessibility-option:focus {
-    background: #f8f8f8;
-    color: #ff6b35;
-}
-
-.accessibility-option[aria-pressed="true"] {
-    background: #fff5f2;
-    color: #ff6b35;
-}
-
-.accessibility-icon {
-    font-size: 18px;
-    width: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.accessibility-statement-link {
-    display: block;
-    padding: 12px 15px;
-    text-align: center;
-    color: #ff6b35;
-    text-decoration: none;
-    border-top: 1px solid #eee;
-    font-size: 13px;
-    transition: background 0.3s;
-}
-
-.accessibility-statement-link:hover,
-.accessibility-statement-link:focus {
-    background: #f8f8f8;
-}
-
-/* Accessibility States */
-body.high-contrast {
-    filter: contrast(1.5);
-}
-
-body.high-contrast * {
-    text-shadow: none !important;
-}
-
-body.highlight-links a {
-    outline: 2px solid #ff6b35 !important;
-    outline-offset: 2px !important;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .accessibility-toolbar {
-        left: 10px;
-        top: 80px;
-    }
-    
-    .accessibility-toggle {
-        width: 45px;
-        height: 45px;
-    }
-    
-    .accessibility-toggle svg {
-        width: 24px;
-        height: 24px;
-    }
-}

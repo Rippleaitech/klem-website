@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>אודות | KLEMENTINA</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Applies saved accessibility settings before the first paint, so a
+         preference chosen on one page does not flash on the next. Kept in
+         sync with the ACCESSIBILITY TOOLBAR section of script.js. -->
+    <script>
+        (function () {
+            try {
+                var s = JSON.parse(localStorage.getItem("klem-a11y") || "{}");
+                var root = document.documentElement;
+                if (s.text === 1) root.classList.add("a11y-text-110");
+                if (s.text === 2) root.classList.add("a11y-text-125");
+                if (s.contrast) root.classList.add("a11y-contrast");
+                if (s.links) root.classList.add("a11y-highlight-links");
+                if (s.font) root.classList.add("a11y-readable-font");
+                if (s.motion) root.classList.add("a11y-no-motion");
+            } catch (e) {}
+        })();
+    </script>
 </head>
 <body>
 
