@@ -222,7 +222,9 @@
         <p class="contact-brand" lang="en">KLEMENTINA</p>
         <p class="contact-tagline">ניהול ואחזקה למגדלי מגורים ברמה הגבוהה ביותר</p>
 
-        <form class="contact-form" novalidate>
+        <form class="contact-form" novalidate name="contact" method="POST" data-netlify="true">
+
+            <input type="hidden" name="form-name" value="contact">
 
             <div class="contact-field">
                 <label for="name">שם מלא</label>

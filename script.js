@@ -387,6 +387,8 @@ if (contactForm) {
         }
     };
 
+    const submitButton = contactForm.querySelector(".contact-button");
+
     contactForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
@@ -408,8 +410,28 @@ if (contactForm) {
             return;
         }
 
-        formStatus.textContent = "הטופס נשלח בהצלחה. ניצור איתכם קשר בהקדם.";
-        contactForm.reset();
+        // Submit to Netlify Forms. The success message and the reset only
+        // happen once Netlify has actually accepted the submission.
+        if (submitButton) submitButton.disabled = true;
+        formStatus.textContent = "שולח…";
+
+        fetch("/", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams(new FormData(contactForm)).toString(),
+        })
+            .then((response) => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                formStatus.textContent = "הטופס נשלח בהצלחה. ניצור איתכם קשר בהקדם.";
+                contactForm.reset();
+            })
+            .catch(() => {
+                // Keep whatever the visitor typed so they can retry
+                formStatus.textContent = "אירעה שגיאה בשליחת הטופס. אנא נסו שוב.";
+            })
+            .finally(() => {
+                if (submitButton) submitButton.disabled = false;
+            });
     });
 
     // Clear a field's error as soon as it becomes valid
