@@ -347,22 +347,6 @@ header {
     transition: transform 0.3s ease;
 }
 
-.managed-item[data-title="שכונת הדר החדשה בגבעת שמואל"] {
-    height: auto;
-}
-
-.managed-item[data-title="שכונת הדר החדשה בגבעת שמואל"] img {
-    object-fit: contain;
-    width: 100%;
-    height: auto;
-}
-
-.managed-item[data-title="שכונת נאות אריאל שרון בקריית אונו"] img {
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
-}
-
 .managed-overlay {
     position: absolute;
     inset: 0;
@@ -447,6 +431,25 @@ header {
 
     .managed-item {
         height: 320px;
+    }
+
+    /* PICTURE 3 - TOP LEFT - Hadar */
+    .managed-item[data-title="שכונת הדר החדשה בגבעת שמואל"] {
+        grid-column: 1;
+        grid-row: 1;
+        height: 320px;
+    }
+
+    /* PICTURE 2 - TOP RIGHT - Ariel Sharon */
+    .managed-item[data-title="שכונת נאות אריאל שרון בקריית אונו"] {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    /* PICTURE 1 - BOTTOM SPANNING - Aloni Borochov */
+    .managed-item[data-title="אלוני בורכוב, רמת גן"] {
+        grid-column: 1 / -1;
+        grid-row: 2;
     }
 
     .managed-text {
