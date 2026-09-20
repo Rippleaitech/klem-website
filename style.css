@@ -140,7 +140,7 @@ header {
 }
 
 .nav-menu-links a:hover {
-    color: #616A70;
+    color: #B84A1F;
 }
 
 .nav-menu-cta {
@@ -148,7 +148,8 @@ header {
     margin-top: auto;
     padding: 18px 0;
 
-    background: #26343B;
+    /* Brand orange marks the one action on the page */
+    background: #B84A1F;
     color: white;
     text-align: center;
     text-decoration: none;
@@ -157,10 +158,11 @@ header {
     font-weight: bold;
     letter-spacing: 0.04em;
     border-radius: 10px;
+    transition: background 0.2s;
 }
 
 .nav-menu-cta:hover {
-    background: #162025;
+    background: #963714;
 }
 
 /* HERO */
@@ -241,7 +243,20 @@ header {
 .about-container h2 {
     font-size: 34px;
     color: #26343B;
-    margin-bottom: 28px;
+    /* Reduced by the height the accent rule below adds, so the gap to the
+       first paragraph stays the 28px it was. */
+    margin-bottom: 11px;
+}
+
+/* Short brand rule under the main heading -- the same 48px hairline used in
+   the contact area and on the content pages, in the brand orange. */
+.about-container h2::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: #B84A1F;
+    margin: 16px auto 0;
 }
 
 .about-container p {
@@ -256,7 +271,7 @@ header {
     margin-top: 24px;
     padding: 14px 32px;
 
-    background-color: #527684;
+    background-color: #B84A1F;
     color: white;
 
     text-decoration: none;
@@ -264,10 +279,11 @@ header {
     font-weight: bold;
 
     border-radius: 3px;
+    transition: background-color 0.2s;
 }
 
 .about-button:hover {
-    background-color: #466571;
+    background-color: #963714;
 }
 
 /* BUILDINGS SLIDESHOW */
@@ -799,7 +815,7 @@ header {
     display: block;
     width: 48px;
     height: 1px;
-    background: #DCE2E3;
+    background: #B84A1F;
     margin: 24px auto 0;
 }
 
@@ -851,7 +867,7 @@ header {
 
 .contact-field input:focus,
 .contact-field textarea:focus {
-    border-color: #26343B;
+    border-color: #B84A1F;
 }
 
 .contact-button {
@@ -859,7 +875,7 @@ header {
     width: 100%;
     margin-top: 14px;
     padding: 18px 0;
-    background: #26343B;
+    background: #B84A1F;
     color: white;
     border: none;
     border-radius: 10px;
@@ -872,7 +888,7 @@ header {
 }
 
 .contact-button:hover {
-    background: #162025;
+    background: #963714;
 }
 
 /* CONTACT DETAILS
@@ -900,7 +916,7 @@ header {
     width: 20px;
     height: 20px;
     fill: none;
-    stroke: #616A70;
+    stroke: #B84A1F;
     stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -925,6 +941,7 @@ a.contact-detail-value {
 }
 
 a.contact-detail-value:hover {
+    color: #B84A1F;
     text-decoration: underline;
 }
 
@@ -993,6 +1010,7 @@ a.contact-detail-value:hover {
 }
 
 .footer-links a:hover {
+    color: #B84A1F;
     text-decoration: underline;
 }
 
@@ -1106,7 +1124,7 @@ a.contact-detail-value:hover {
     display: block;
     width: 48px;
     height: 1px;
-    background: #DCE2E3;
+    background: #B84A1F;
     margin: 26px auto 0;
 }
 
@@ -1153,6 +1171,11 @@ a.contact-detail-value:hover {
 .content-prose a {
     color: #26343B;
     text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.content-prose a:hover {
+    color: #B84A1F;
 }
 
 /* Closing notes (last updated / wording disclaimer) */
@@ -1178,7 +1201,7 @@ a.contact-detail-value:hover {
     display: inline-block;
     padding: 18px 44px;
 
-    background: #26343B;
+    background: #B84A1F;
     color: white;
     text-decoration: none;
 
@@ -1190,7 +1213,7 @@ a.contact-detail-value:hover {
 }
 
 .content-cta:hover {
-    background: #162025;
+    background: #963714;
 }
 
 .content-back {
@@ -1205,6 +1228,7 @@ a.contact-detail-value:hover {
 }
 
 .content-back a:hover {
+    color: #B84A1F;
     text-decoration: underline;
 }
 
@@ -1970,6 +1994,7 @@ html.a11y-contrast a:not(.accessibility-statement-link) {
 
 html.a11y-contrast .content-cta,
 html.a11y-contrast .nav-menu-cta,
+html.a11y-contrast .about-button,
 html.a11y-contrast .contact-button {
     background: #000000 !important;
     color: #FFFFFF !important;
@@ -1994,6 +2019,14 @@ html.a11y-highlight-links a:not(.accessibility-statement-link) {
     outline: 2px solid #B84A1F !important;
     outline-offset: 2px !important;
     text-decoration: underline !important;
+}
+
+/* The CTAs are brand orange themselves, so an orange ring around them barely
+   reads -- they get the charcoal one instead. */
+html.a11y-highlight-links a.about-button,
+html.a11y-highlight-links a.nav-menu-cta,
+html.a11y-highlight-links a.content-cta {
+    outline-color: #26343B !important;
 }
 
 /* Readable font */
