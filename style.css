@@ -1672,10 +1672,11 @@ a.contact-detail-value:hover {
 
 /* ===================== ACCESSIBILITY TOOLBAR ===================== */
 
+/* Bottom-right, mirroring the WhatsApp float in the opposite corner. */
 .accessibility-toolbar {
     position: fixed;
-    top: 100px;
-    left: 20px;
+    right: 28px;
+    bottom: 28px;
     /* Above the WhatsApp float (9000) so the panel is never overlapped */
     z-index: 9100;
 }
@@ -1716,18 +1717,25 @@ a.contact-detail-value:hover {
     stroke: none;
 }
 
+/* The toggle sits in the bottom-right corner, so the panel opens inward
+   (leftward) and is bottom-aligned with the button -- it can never reach past
+   the right edge or below the viewport. */
 .accessibility-menu {
     position: absolute;
-    top: 0;
-    left: 60px;
+    right: 60px;
+    bottom: 0;
     background: #FFFFFF;
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     min-width: 240px;
     padding-bottom: 4px;
+    /* Short viewports (phone landscape) scroll the panel rather than let it
+       run off the top of the screen. */
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
     opacity: 0;
     visibility: hidden;
-    transform: translateX(-10px);
+    transform: translateX(10px);
     transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
 }
 
@@ -1872,8 +1880,8 @@ a.contact-detail-value:hover {
 
 @media (max-width: 768px) {
     .accessibility-toolbar {
-        left: 10px;
-        top: 80px;
+        right: 18px;
+        bottom: calc(22px + env(safe-area-inset-bottom, 0px));
     }
 
     .accessibility-toggle {
@@ -1886,11 +1894,16 @@ a.contact-detail-value:hover {
         height: 24px;
     }
 
-    /* Opening rightward would run the panel off a narrow screen */
+    /* No room for the panel beside the button on a phone, so it opens upward,
+       aligned to the button's right edge and capped to the screen width. */
     .accessibility-menu {
-        top: 55px;
-        left: 0;
-        transform: translateY(-10px);
+        right: 0;
+        bottom: 55px;
+        min-width: 0;
+        width: 240px;
+        max-width: calc(100vw - 36px);
+        max-height: calc(100vh - 100px);
+        transform: translateY(10px);
     }
 
     .accessibility-toolbar.active .accessibility-menu {
