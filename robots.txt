@@ -1,0 +1,8 @@
+# Allow ChatGPT Search to discover the public website.
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: *
+Allow: /
+
+Sitemap: https://klem.co.il/sitemap.xml
