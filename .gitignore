@@ -1,0 +1,14 @@
+# Local operating-system files
+.DS_Store
+Thumbs.db
+
+# Local editor and Python environment files
+.idea/
+.venv/
+__pycache__/
+*.pyc
+
+# Local secrets
+.env
+.env.*
+!.env.example
