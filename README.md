@@ -41,6 +41,16 @@ Verified 8 October 2026: klem.co.il is served by Netlify project `effervescent-b
 
 ## Handoff notes
 
+### Lead tracking — 10 October 2026
+
+- `script.js` emits `klem:lead-submitted` only after Netlify accepts a contact-form POST. A pending-request guard prevents double submission. Validation failures, rejected requests and network errors do not count as leads; measurement errors do not change the successful form result.
+- `analytics.js` sends GA4 `generate_lead` with `form_name=contact` and `method=contact_form`. `whatsapp_click`, `phone_click` and `email_click` are supporting contact-attempt events, not confirmed enquiries. They are not sent as OpenAI conversions. The production hostname restriction still excludes previews, localhost and the older website.
+- Created OpenAI data source `Klementina | klem.co.il`, public Pixel ID `EkxNrokDFMseq7cup6XkKD`, and conversion `KLEM contact form submitted` for `lead_created`. Attached it to the existing clicks campaign. Its budget and objective were preserved. The user explicitly authorized accepting the Conversion Terms in this chat.
+- The site uses OpenAI's documented image-tag endpoint, rendering one hidden image after form success. This deliberately avoids the JavaScript SDK's automatic customer-information matching. Payloads contain the event type, a random event ID, and an available OpenAI click identifier; no contact-form contents are sent to either measurement event. Browser network metadata is still received by the providers. The privacy page describes this setup.
+- Campaign UTMs now also include `openai_click_id={oppref}`. The site accepts either `oppref` or `openai_click_id`, retaining the identifier in `klem_openai_click` local storage with a 30-day expiry for navigation between pages and later visits. Expired identifiers are removed on the next page load. No tracking credentials or server API keys are exposed.
+- Regression checks: `node --test tests/lead-tracking.test.cjs` covers successful/failed/invalid submissions, pending duplicates, contact attempts, production-only collection, attribution expiry and blocked storage/tracking.
+- Before completion, verify GA4 `generate_lead` is marked as a key event, production deployment, a clearly labelled test enquiry in Netlify, and receipt in GA4 Realtime and the OpenAI event stream. A direct test visit validates receipt, not attribution to a real ad click; it should not be reported as a paid lead. Use `utm_campaign=klementina_tracking_validation` for test visits.
+
 ### OpenAI Ads and GA4 — 10 October 2026
 
 - The two websites run in parallel. Preserve the older domain, website, GA4 property `558024694`, and its stream `16069287956` / `G-LJTD1YVE8K`; do not redirect or migrate it.

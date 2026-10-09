@@ -243,7 +243,7 @@ if (statsSection) {
     observer.observe(statsSection);
 }
 
-// Contact Form Temporary Submit
+// Contact form: record a lead only after the submission is accepted.
 const contactForm = document.querySelector(".contact-form");
 
 if (contactForm) {
@@ -272,9 +272,11 @@ if (contactForm) {
     };
 
     const submitButton = contactForm.querySelector(".contact-button");
+    let isSubmitting = false;
 
     contactForm.addEventListener("submit", (e) => {
         e.preventDefault();
+        if (isSubmitting) return;
 
         const invalid = [];
 
@@ -296,6 +298,7 @@ if (contactForm) {
 
         // Submit to Netlify Forms. The success message and the reset only
         // happen once Netlify has actually accepted the submission.
+        isSubmitting = true;
         if (submitButton) submitButton.disabled = true;
         formStatus.textContent = "שולח…";
 
@@ -308,12 +311,14 @@ if (contactForm) {
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 formStatus.textContent = "הטופס נשלח בהצלחה. ניצור איתכם קשר בהקדם.";
                 contactForm.reset();
+                document.dispatchEvent(new CustomEvent("klem:lead-submitted"));
             })
             .catch(() => {
                 // Keep whatever the visitor typed so they can retry
                 formStatus.textContent = "אירעה שגיאה בשליחת הטופס. אנא נסו שוב.";
             })
             .finally(() => {
+                isSubmitting = false;
                 if (submitButton) submitButton.disabled = false;
             });
     });
