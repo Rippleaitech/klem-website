@@ -41,6 +41,17 @@ Verified 8 October 2026: klem.co.il is served by Netlify project `effervescent-b
 
 ## Handoff notes
 
+### OpenAI Ads and GA4 — 10 October 2026
+
+- The two websites run in parallel. Preserve the older domain, website, GA4 property `558024694`, and its stream `16069287956` / `G-LJTD1YVE8K`; do not redirect or migrate it.
+- Created a separate property `Klementina | klem.co.il | GA4` (`558318396`) in account `KLEM` (`411260682`), accessed through `info@klemantina-group.co.il`. Reporting time zone is Israel and currency ILS. The new web stream is `16098594561`, measurement ID `G-4JVRVNQNTD`.
+- Added `analytics.js` to all nine pages. It initializes the new tag only on `klem.co.il` or `www.klem.co.il`, excluding local development and Netlify previews. Google Signals and ad personalization are disabled in this tag configuration. Added a factual Google Analytics disclosure to the privacy page.
+- OpenAI Ads Manager has no verified native GA4 connection. Saved campaign tracking parameters: `utm_source=openai&utm_medium=cpc&utm_campaign=klementina_building_management&utm_id={campaign_id}&utm_content={ad_id}&utm_source_platform=openai`. Removed the ad URL's old `klementina_test` UTM values; destination remains `https://klem.co.il/services`. The ad-group and ad-level tracking fields are empty, so campaign settings apply.
+- This measures website visits and interactions in GA4. UTMs do not import OpenAI spend or send conversions back to Ads Manager. No OpenAI measurement pixel or Conversions API was installed. No contact-form event was marked as a GA4 key event.
+- Saved the `OpenAI Ads – Clementina` detailed report (`16098616801`) in the new property. Its session source/medium filter is `^openai / cpc$`, with session campaign as the default dimension; it includes sessions, engagement, and key-event metrics. Report URL: https://analytics.google.com/analytics/web/?authuser=4#/a411260682p558318396/reports/explorer?r=16098616801
+- The user explicitly approved uploading and merging the GA4 tag and privacy-notice change on 10 October 2026. Publish through a reviewed pull request; confirm production deployment and received GA4 events afterward.
+- Validate production delivery and GA4 Realtime after deployment. Use a distinct `klementina_tracking_validation` campaign for test visits so they can be separated from actual ad traffic.
+
 ### Search content update — 10 October 2026
 
 - Prepared on `codex/search-content`. Added three static project pages using existing descriptions and photo assignments. The homepage cards retain their design and now link to those pages. Project photo galleries retain image enlargement, keyboard dismissal, and focus restoration; ordinary image links also work without JavaScript.
