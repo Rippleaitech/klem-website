@@ -31,7 +31,7 @@ Local saves do not automatically reach GitHub. Uploaded work remains available w
 
 ## Website files and preview
 
-This is a static HTML, CSS, and JavaScript website. Pages include `index.html`, `about.html`, `services.html`, `accessibility.html`, and `privacy.html`. Shared styling and behavior live in `style.css` and `script.js`; media lives in `images/` and `videos/`.
+This is a static HTML, CSS, and JavaScript website. Pages include `index.html`, `about.html`, `services.html`, `faq.html`, `accessibility.html`, and `privacy.html`. The managed-building pages are `project-hadar.html`, `project-ariel-sharon.html`, and `project-aloni-borochov.html`. Shared styling and behavior live in `style.css` and `script.js`; media lives in `images/` and `videos/`.
 
 For a local preview, run `python3 -m http.server 8000` from the project folder and open `http://localhost:8000`. Stop the server when finished.
 
@@ -40,6 +40,16 @@ For a local preview, run `python3 -m http.server 8000` from the project folder a
 Verified 8 October 2026: klem.co.il is served by Netlify project `effervescent-bombolone-7970a6`. Its deployment history links production to `Rippleaitech/klem-website` main (published `aed7c31` before this update), and pull requests receive deploy previews. Merging to main is the production publishing path; verify the resulting deployment and live content after each merge.
 
 ## Handoff notes
+
+### Search content update — 10 October 2026
+
+- Prepared on `codex/search-content`. Added three static project pages using existing descriptions and photo assignments. The homepage cards retain their design and now link to those pages. Project photo galleries retain image enlargement, keyboard dismissal, and focus restoration; ordinary image links also work without JavaScript.
+- Added eight Hebrew FAQ answers covering services, coverage, price factors, switching providers, payments, maintenance requests, emergencies, and contact. Pricing and switching text is general preparation guidance; no prices, contract terms, response-time guarantees, reviews, or new project claims were added.
+- Kept the current palette, typeface, spacing, header, navigation, and accessibility controls. The homepage service line is now inside the H1 while retaining the existing visual hierarchy. Added FAQ links, page metadata, business structured data, and all four new pages to the sitemap.
+- Current-site business details are consistent. Use the following confirmed details when updating external profiles: business name `קלמנטינה — ניהול ואחזקה` / `KLEMENTINA`; website `https://klem.co.il/`; address `גולומב 40, גבעתיים`; phone `03-9153556`; email `info@klemantina-group.co.il`; WhatsApp `058-7222680`; service area Central Israel and Shfela. The WhatsApp number is intentionally different from the office phone. Describe 24/7 availability as emergency-only, not regular office opening hours.
+- Google Business Profile updates are explicitly deferred by the user as of 10 October 2026; leave that profile unchanged. Old-site Wix changes remain pending account access. When that work resumes, replace the old site's outdated address with Golomb 40, Givatayim, and align the business name, current website link, phone, and service-area wording. Do not invent street-level project addresses, precise service boundaries, or opening hours. A full old-domain redirect requires a separately confirmed migration plan.
+- Google Search Console setup is explicitly deferred by the user. Google Analytics remains unconnected pending account sign-in or a measurement ID. No placeholder tracking ID was installed.
+- Validation: all nine pages parsed with one H1, valid JSON-LD, unique IDs, balanced HTML, and existing local links/assets/fragment targets; sitemap contains nine unique pages. JavaScript syntax and diff checks passed. Desktop and phone previews checked, including project navigation, gallery enlargement/Escape/focus restoration, FAQ, and the menu. The user authorized publication on 10 October 2026. Publish through a reviewed pull request to main and verify the resulting Netlify deployment and live pages.
 
 - 23 September 2026: Local `main` and GitHub `main` matched at `6c521bc` before collaboration documentation was added.
 - Collaborator access for Shai and setup on his device remain pending.

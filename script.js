@@ -202,122 +202,6 @@ if (slidesTrack && totalSlides > 0) {
     }, { passive: true });
 }
 
-// Project Data
-const projectData = {
-    "שכונת הדר החדשה בגבעת שמואל": {
-        title: "שכונת הדר, גבעת שמואל",
-        text: `<p>פרויקט מגורים רחב היקף בשכונת הדר המבוקשת בגבעת שמואל, הכולל מגדלי מגורים וסביבה משותפת מטופחת. המתחם משלב לובאים מעוצבים, שטחים ירוקים, גינות, שבילים ושטחים משותפים המשרתים את דיירי הפרויקט.</p><p>קלמנטינה אחראית על הניהול והתחזוקה השוטפת של המתחם, לרבות ניקיון, גינון, תחזוקת המערכות והשטחים המשותפים, תוך שמירה על סטנדרט גבוה וחוויית מגורים איכותית לאורך זמן.</p>`,
-        cover: "images/cover_lipkin.jpeg",
-        gallery: [
-            "images/lipkin_1.jpeg",
-            "images/lipkin_2.jpeg",
-            "images/cover_ariel_sharon.jpeg"
-        ]
-    },
-    "שכונת נאות אריאל שרון בקריית אונו": {
-        title: "שכונת נאות אריאל שרון | קריית אונו",
-        text: `<p>מתחם אריאל שרון, קריית אונו</p><p>קלמנטינה אחראית על הניהול והתחזוקה השוטפת של מתחם מגורים ומסחר רחב הכולל מספר מגדלים. השירות כולל ניהול מערכות הבניינים, ניקיון ותחזוקת השטחים המשותפים, טיפוח הסביבה והגינון ומתן מענה שוטף לדיירים — תוך שמירה על סטנדרט גבוה ואחיד בכל רחבי המתחם.</p>`,
-        cover: "images/cover_ariel_sharon_1.jpeg",
-        gallery: [
-            "images/cover_ariel_sharon_2.jpeg",
-            "images/Ariel_Sharon_2.jpeg",
-            "images/Ariel_Sharon_3.jpeg"
-        ]
-    },
-    "אלוני בורכוב, רמת גן": {
-        title: "אלוני בורכוב, רמת גן",
-        text: `<p>מתחם מגורים יוקרתי בלב רמת גן, הכולל חדר כושר, שמירה ושטחים משותפים ברמה גבוהה. קלמנטינה אחראית על הניהול והתחזוקה השוטפת של המתחם, תוך הקפדה על נראות, ניקיון, תחזוקה ושירות לדיירים.</p>`,
-        cover: "images/Aloni_Borochov_Cover.jpeg",
-        gallery: [
-            "images/Aloni_Borochov_1.jpeg",
-            "images/Aloni_Borochov_2.jpeg",
-            "images/Aloni_Borochov_3.jpeg"
-        ]
-    }
-};
-
-// Managed Buildings Interactions
-const managedItems = document.querySelectorAll(".managed-item");
-
-managedItems.forEach(item => {
-    const overlay = item.querySelector(".managed-overlay");
-    const projectTitle = item.getAttribute("data-title");
-
-    // Check if this project has detail data
-    const hasProjectData = projectData[projectTitle];
-
-    if (hasProjectData) {
-        // Track touch position to distinguish tap from scroll
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let touchMoved = false;
-
-        item.addEventListener("touchstart", (e) => {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            touchMoved = false;
-        });
-
-        item.addEventListener("touchmove", (e) => {
-            const touchEndX = e.touches[0].clientX;
-            const touchEndY = e.touches[0].clientY;
-            const deltaX = Math.abs(touchEndX - touchStartX);
-            const deltaY = Math.abs(touchEndY - touchStartY);
-
-            // If finger moved more than 10px, consider it scrolling
-            if (deltaX > 10 || deltaY > 10) {
-                touchMoved = true;
-            }
-        });
-
-        item.addEventListener("touchend", (e) => {
-            // Only open project if touch didn't move (intentional tap)
-            if (!touchMoved) {
-                e.preventDefault();
-                openProjectModal(projectTitle);
-            }
-        });
-
-        // Desktop click behavior remains unchanged
-        item.addEventListener("click", (e) => {
-            // Only handle click if it's not from touch
-            if (e.pointerType === "mouse" || !e.pointerType) {
-                e.preventDefault();
-                openProjectModal(projectTitle);
-            }
-        });
-
-        // The card carries role="button", so it must answer Enter and Space
-        // like a real button does.
-        item.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
-                e.preventDefault();
-                openProjectModal(projectTitle);
-            }
-        });
-
-        // Change cursor to pointer
-        item.style.cursor = "pointer";
-    } else {
-        // For other projects, keep the original overlay behavior
-        let tapTimeout = null;
-        let lastTap = 0;
-
-        item.addEventListener("touchstart", (e) => {
-            const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTap;
-
-            if (tapLength < 300 && tapLength > 0) {
-                e.preventDefault();
-            } else {
-                overlay.classList.toggle("active");
-            }
-
-            lastTap = currentTime;
-        });
-    }
-});
-
 // Statistics Counter Animation
 const statNumbers = document.querySelectorAll(".stat-number");
 let hasAnimated = false;
@@ -447,89 +331,6 @@ if (contactForm) {
         });
     });
 }
-
-// Project Modal Functions
-let lastFocusedBeforeDialog = null;
-let lastFocusedBeforeLightbox = null;
-
-const restoreFocusAfterDialog = () => {
-    if (lastFocusedBeforeDialog) {
-        lastFocusedBeforeDialog.focus();
-        lastFocusedBeforeDialog = null;
-    }
-};
-
-const projectModal = document.getElementById("projectModal");
-const projectModalOverlay = document.getElementById("projectModalOverlay");
-const projectModalClose = document.getElementById("projectModalClose");
-const projectModalTitle = document.getElementById("projectModalTitle");
-const projectModalText = document.getElementById("projectModalText");
-const projectModalCover = document.getElementById("projectModalCover");
-const projectModalGallery = document.getElementById("projectModalGallery");
-
-function openProjectModal(projectKey) {
-    const project = projectData[projectKey];
-    if (!project) return;
-
-    // Set content
-    projectModalTitle.textContent = project.title;
-    projectModalText.innerHTML = project.text;
-
-    // Set cover image
-    projectModalCover.innerHTML = `<img src="${project.cover}" alt="${project.title}">`;
-
-    // Set gallery images
-    projectModalGallery.innerHTML = "";
-    project.gallery.forEach((imgSrc, index) => {
-        const img = document.createElement("img");
-        img.src = imgSrc;
-        img.alt = `${project.title} - תמונה ${index + 1}`;
-        img.setAttribute("role", "button");
-        img.setAttribute("tabindex", "0");
-        img.setAttribute("aria-label", `${project.title} - הגדלת תמונה ${index + 1}`);
-        img.addEventListener("click", () => openGalleryLightbox(imgSrc));
-        img.addEventListener("keydown", (ev) => {
-            if (ev.key === "Enter" || ev.key === " " || ev.key === "Spacebar") {
-                ev.preventDefault();
-                openGalleryLightbox(imgSrc);
-            }
-        });
-        projectModalGallery.appendChild(img);
-    });
-
-    // Show modal
-    lastFocusedBeforeDialog = document.activeElement;
-    projectModal.classList.add("active");
-    document.body.style.overflow = "hidden";
-    projectModal.focus();
-}
-
-function closeProjectModal() {
-    projectModal.classList.remove("active");
-    document.body.style.overflow = "";
-    restoreFocusAfterDialog();
-}
-
-// Close modal on overlay click
-if (projectModalOverlay) {
-    projectModalOverlay.addEventListener("click", closeProjectModal);
-}
-
-// Close modal on close button click
-if (projectModalClose) {
-    projectModalClose.addEventListener("click", closeProjectModal);
-}
-
-// Close modal on Escape key
-document.addEventListener("keydown", (e) => {
-    if (!projectModal || !projectModal.classList.contains("active")) return;
-
-    if (e.key === "Escape") {
-        closeProjectModal();
-        return;
-    }
-    trapFocus(projectModal, e);
-});
 
 // ===================== ACCESSIBILITY TOOLBAR =====================
 // User-facing display adjustments, persisted across pages in localStorage.
@@ -799,15 +600,20 @@ const buildA11yToolbar = () => {
 applyA11ySettings();
 buildA11yToolbar();
 
+// Gallery links work as ordinary image links without JavaScript.
+let lastFocusedBeforeLightbox = null;
+
 // Gallery Lightbox Functions
 const galleryLightbox = document.getElementById("galleryLightbox");
 const galleryLightboxOverlay = document.getElementById("galleryLightboxOverlay");
 const galleryLightboxClose = document.getElementById("galleryLightboxClose");
 const galleryLightboxImage = document.getElementById("galleryLightboxImage");
 
-function openGalleryLightbox(imageSrc) {
+function openGalleryLightbox(imageSrc, imageAlt) {
     lastFocusedBeforeLightbox = document.activeElement;
     galleryLightboxImage.src = imageSrc;
+    galleryLightboxImage.alt = imageAlt;
+    document.body.style.overflow = "hidden";
     galleryLightbox.classList.add("active");
     galleryLightbox.focus();
 }
@@ -815,6 +621,8 @@ function openGalleryLightbox(imageSrc) {
 function closeGalleryLightbox() {
     galleryLightbox.classList.remove("active");
     galleryLightboxImage.src = "";
+    galleryLightboxImage.alt = "";
+    document.body.style.overflow = "";
     if (lastFocusedBeforeLightbox) {
         lastFocusedBeforeLightbox.focus();
         lastFocusedBeforeLightbox = null;
@@ -842,3 +650,11 @@ document.addEventListener("keydown", (e) => {
     trapFocus(galleryLightbox, e);
 });
 
+
+document.querySelectorAll(".project-photo-link").forEach((link) => {
+    link.addEventListener("click", (event) => {
+        if (!galleryLightbox || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        openGalleryLightbox(link.href, link.querySelector("img").alt);
+    });
+});
