@@ -37,18 +37,19 @@ function boot() {
       <button type="button" data-action="settings">בחירת הגדרות</button>
       <button type="button" data-action="save" hidden>שמירת הבחירה</button>
     </div>`;
-  const preferences = document.createElement('button'); preferences.type = 'button'; preferences.className = 'klem-replay-preferences rr-block'; preferences.textContent = 'הגדרות פרטיות';
+  const preferences = document.querySelector('[data-privacy-settings]');
+  if (preferences) preferences.hidden = false;
   const fields = panel.querySelector('fieldset'), inputs = [...fields.querySelectorAll('input')];
   const settings = panel.querySelector('[data-action="settings"]'), save = panel.querySelector('[data-action="save"]');
   function sync() { inputs.forEach(input => { input.checked = privacy.allows(input.name); }); }
   function expand() { sync(); fields.hidden = false; settings.hidden = true; save.hidden = false; inputs[0].focus(); }
-  function choose(choices) { privacy.choose(choices); panel.hidden = true; preferences.focus(); }
+  function choose(choices) { privacy.choose(choices); panel.hidden = true; (preferences || document.querySelector('a[href*="privacy"]'))?.focus(); }
   panel.querySelector('[data-action="accept"]').onclick = () => choose({ analytics: true, replay: true, advertising: true });
   panel.querySelector('[data-action="reject"]').onclick = () => choose({});
   settings.onclick = expand;
   save.onclick = () => choose(Object.fromEntries(inputs.map(input => [input.name, input.checked])));
-  preferences.onclick = () => { panel.hidden = !panel.hidden; if (!panel.hidden) expand(); };
-  document.body.append(panel, preferences);
+  if (preferences) preferences.onclick = () => { panel.hidden = !panel.hidden; if (!panel.hidden) expand(); };
+  document.body.append(panel);
   panel.hidden = !!privacy.current(); sync();
   document.addEventListener('klem:privacy-change', () => {
     if (privacy.allows('replay')) start(); else withdraw();
