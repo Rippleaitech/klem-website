@@ -9,7 +9,7 @@ const script = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
 const formCode = script.slice(script.indexOf('// Contact form:'), script.indexOf('// ===================== ACCESSIBILITY TOOLBAR'));
 const tick = () => new Promise(resolve => setImmediate(resolve));
 
-function setup({ hostname = 'klem.co.il', search = '', storage = new Map(), blockStorage = false, rejectBeacon = false } = {}) {
+function setup({ hostname = 'klem.co.il', search = '', storage = new Map(), blockStorage = false, rejectBeacon = false, choices = {analytics:true, advertising:true} } = {}) {
     const listeners = new Map();
     const scripts = [], beacons = [], requests = [];
     const fields = Object.fromEntries(Object.entries({name:'Test person', phone:'0000000000', email:'test@example.com', message:'Test only'}).map(([id, value]) => [id, {
@@ -33,7 +33,7 @@ function setup({ hostname = 'klem.co.il', search = '', storage = new Map(), bloc
         setItem(k,v){if(blockStorage) throw Error('blocked');storage.set(k,v);},
         removeItem(k){if(blockStorage) throw Error('blocked');storage.delete(k);},
     };
-    const window = {location:{hostname, search, href:'https://' + hostname + '/' + search}, localStorage, crypto:require('node:crypto').webcrypto};
+    const window = {location:{hostname, search, href:'https://' + hostname + '/' + search}, localStorage, klemPrivacy: {allows: purpose => choices[purpose] === true}, crypto:require('node:crypto').webcrypto};
     const context = vm.createContext({window,document,URL,URLSearchParams,Date,Math,JSON,
         CustomEvent: class {constructor(type){this.type=type;}},
         FormData: class { constructor(){return Object.entries(fields).map(([k,v])=>[k,v.value]);} },
@@ -120,4 +120,35 @@ test('blocked storage or analytics does not prevent a saved enquiry', async () =
     const blocked=setup({rejectBeacon:true}); blocked.submit(); blocked.requests[0].resolve({ok:true}); await tick();
     assert.equal(blocked.resets(),1);
     assert.match(blocked.status.textContent,/בהצלחה/);
+});
+
+test('no optional requests or attribution storage before consent; form still works', async () => {
+    const s = setup({choices:{}, search:'?oppref=must-not-store'});
+    s.click('tel:+97239153556'); s.submit(); s.requests[0].resolve({ok:true}); await tick();
+    assert.equal(s.scripts.length,0); assert.equal(s.beacons.length,0); assert.equal(s.events().length,0);
+    assert.equal(s.storage.has('klem_openai_click'),false); assert.equal(s.resets(),1);
+});
+
+test('analytics and advertising consent are independent and withdrawn events are dropped', async () => {
+    for (const choices of [{analytics:true,advertising:false},{analytics:false,advertising:true}]) {
+        const s=setup({choices,search:'?oppref=allowed-only-for-ads'});
+        s.submit(); s.requests[0].resolve({ok:true}); await tick();
+        assert.equal(s.scripts.length, choices.analytics ? 1 : 0);
+        assert.equal(s.events().length, choices.analytics ? 1 : 0);
+        assert.equal(s.beacons.length, choices.advertising ? 1 : 0);
+        assert.equal(s.storage.has('klem_openai_click'), choices.advertising);
+        choices.analytics=false; choices.advertising=false;
+        s.document.dispatchEvent({type:'klem:privacy-change'});
+        s.document.dispatchEvent({type:'klem:lead-submitted'});
+        assert.equal(s.events().length + s.beacons.length,1);
+    }
+});
+
+test('granting consent late does not replay earlier contact events or duplicate Google setup', () => {
+    const choices={}; const s=setup({choices});
+    s.document.dispatchEvent({type:'klem:lead-submitted'});
+    choices.analytics=true;
+    s.document.dispatchEvent({type:'klem:privacy-change'});
+    s.document.dispatchEvent({type:'klem:privacy-change'});
+    assert.equal(s.scripts.length,1); assert.equal(s.events().length,0);
 });
