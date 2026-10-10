@@ -1,0 +1,16 @@
+[build]
+  command = "node scripts/build.mjs"
+  publish = "dist"
+[build.environment]
+  NODE_VERSION = "22"
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+[[headers]]
+  for = "/visitors/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "no-referrer"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' https://klem.co.il 'unsafe-inline'; img-src 'self' https://klem.co.il data:; font-src 'self' data:; connect-src 'self'; frame-src 'self' about:; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"

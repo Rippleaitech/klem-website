@@ -39,6 +39,10 @@ For a local preview, run `python3 -m http.server 8000` from the project folder a
 
 Verified 8 October 2026: klem.co.il is served by Netlify project `effervescent-bombolone-7970a6`. Its deployment history links production to `Rippleaitech/klem-website` main (published `aed7c31` before this update), and pull requests receive deploy previews. Merging to main is the production publishing path; verify the resulting deployment and live content after each merge.
 
+## Custom visitor recordings
+
+The custom visitor dashboard and setup guide are in [replay/README.md](replay/README.md). It provides consent-based session replay, traffic-source details, test filtering and contact-event timelines at `/visitors/`. Netlify now builds and publishes `dist/`; the source HTML remains editable as before. Private hosting variables are required before recording activates. Never commit the generated dashboard access file.
+
 ## Handoff notes
 
 ### Lead tracking — 10 October 2026

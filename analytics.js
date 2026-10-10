@@ -3,18 +3,26 @@
     if (!["klem.co.il", "www.klem.co.il"].includes(window.location.hostname)) return;
 
     const measurementId = "G-4JVRVNQNTD";
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
-    window.gtag("js", new Date());
-    window.gtag("config", measurementId, {
-        allow_google_signals: false,
-        allow_ad_personalization_signals: false,
-    });
-
-    const tag = document.createElement("script");
-    tag.async = true;
-    tag.src = "https://www.googletagmanager.com/gtag/js?id=" + measurementId;
-    document.head.appendChild(tag);
+    const permits = purpose => window.klemPrivacy?.allows(purpose) === true;
+    let googleLoaded = false;
+    function startGoogle() {
+        if (!permits('analytics') || googleLoaded) return;
+        googleLoaded = true;
+        window['ga-disable-' + measurementId] = false;
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', measurementId, {
+            allow_google_signals: false,
+            allow_ad_personalization_signals: false,
+            page_location: window.location.origin + window.location.pathname,
+            page_referrer: (() => { try { return new URL(document.referrer).origin; } catch { return ''; } })(),
+        });
+        const tag = document.createElement('script');
+        tag.async = true;
+        tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + measurementId;
+        document.head.appendChild(tag);
+    }
 
     // Use the documented image-tag transport with an explicit event payload.
     // This does not load the SDK's automatic customer-information matching.
@@ -23,7 +31,10 @@
     const attributionLifetime = 30 * 24 * 60 * 60 * 1000;
     let openaiClick = "";
 
-    try {
+    function attribution() {
+      openaiClick = '';
+      if (!permits('advertising')) return;
+      try {
         const query = new URLSearchParams(window.location.search);
         const incoming = query.get("oppref") || query.get("openai_click_id");
         if (incoming && incoming.length <= 2048) {
@@ -45,7 +56,13 @@
         // Storage restrictions must not stop the form or same-page attribution.
     }
 
+    }
+    function update() { startGoogle(); attribution(); }
+    document.addEventListener('klem:privacy-change', update);
+    update();
+
     const sendGoogleEvent = (name, parameters) => {
+        if (!permits('analytics')) return;
         try {
             window.gtag("event", name, parameters);
         } catch (_) {
@@ -56,6 +73,7 @@
     document.addEventListener("klem:lead-submitted", () => {
         sendGoogleEvent("generate_lead", { form_name: "contact", method: "contact_form" });
 
+        if (!permits('advertising')) return;
         try {
             const eventId = window.crypto && window.crypto.randomUUID
                 ? window.crypto.randomUUID()
