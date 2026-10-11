@@ -45,6 +45,12 @@ The custom visitor dashboard and setup guide are in [replay/README.md](replay/RE
 
 ## Handoff notes
 
+### GA4 campaign attribution repair — 11 October 2026
+
+- The consent update removed query parameters from the page URL sent to Google but did not separately pass campaign labels. `analytics.js` now supplies the documented `campaign_source`, `campaign_medium`, `campaign_name`, `campaign_id`, and `campaign_content` fields from their matching UTM parameters after analytics consent.
+- Only one value per permitted field is accepted, limited to 100 letters, numbers, spaces, dots, underscores or hyphens. The page URL still excludes query parameters and fragments; referrers still contain only their origin. Arbitrary URL parameters, search terms, email-like values and OpenAI click identifiers are not included in Google's configuration. No additional browser storage or cross-system visitor identifiers are introduced.
+- Regression coverage verifies campaign labels, late consent, denied/withdrawn consent, duplicate and unsafe values, Hebrew labels, and continued separation of analytics and advertising. This change improves future attribution; it cannot reconstruct earlier missing campaign labels or reconcile anonymous visitors between Google and the recording dashboard.
+
 ### Lead tracking — 10 October 2026
 
 - `script.js` emits `klem:lead-submitted` only after Netlify accepts a contact-form POST. A pending-request guard prevents double submission. Validation failures, rejected requests and network errors do not count as leads; measurement errors do not change the successful form result.
