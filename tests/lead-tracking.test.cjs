@@ -9,7 +9,7 @@ const script = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
 const formCode = script.slice(script.indexOf('// Contact form:'), script.indexOf('// ===================== ACCESSIBILITY TOOLBAR'));
 const tick = () => new Promise(resolve => setImmediate(resolve));
 
-function setup({ hostname = 'klem.co.il', search = '', storage = new Map(), blockStorage = false, rejectBeacon = false, choices = {analytics:true, advertising:true} } = {}) {
+function setup({ hostname = 'klem.co.il', pathname = '/', search = '', referrer = '', storage = new Map(), blockStorage = false, rejectBeacon = false, choices = {analytics:true, advertising:true} } = {}) {
     const listeners = new Map();
     const scripts = [], beacons = [], requests = [];
     const fields = Object.fromEntries(Object.entries({name:'Test person', phone:'0000000000', email:'test@example.com', message:'Test only'}).map(([id, value]) => [id, {
@@ -20,6 +20,7 @@ function setup({ hostname = 'klem.co.il', search = '', storage = new Map(), bloc
     let submit, resets = 0;
     const form = { querySelector: () => button, addEventListener: (name, fn) => { if(name === 'submit') submit = fn; }, reset(){resets++;} };
     const document = {
+        referrer,
         head: {appendChild: el => scripts.push(el)},
         body: {appendChild: el => {if(rejectBeacon) throw Error('blocked'); beacons.push(el);}},
         createElement: tag => ({tag, remove(){this.removed=true;}}),
@@ -33,7 +34,7 @@ function setup({ hostname = 'klem.co.il', search = '', storage = new Map(), bloc
         setItem(k,v){if(blockStorage) throw Error('blocked');storage.set(k,v);},
         removeItem(k){if(blockStorage) throw Error('blocked');storage.delete(k);},
     };
-    const window = {location:{hostname, search, href:'https://' + hostname + '/' + search}, localStorage, klemPrivacy: {allows: purpose => choices[purpose] === true}, crypto:require('node:crypto').webcrypto};
+    const window = {location:new URL('https://' + hostname + pathname + search), localStorage, klemPrivacy: {allows: purpose => choices[purpose] === true}, crypto:require('node:crypto').webcrypto};
     const context = vm.createContext({window,document,URL,URLSearchParams,Date,Math,JSON,
         CustomEvent: class {constructor(type){this.type=type;}},
         FormData: class { constructor(){return Object.entries(fields).map(([k,v])=>[k,v.value]);} },
@@ -45,9 +46,58 @@ function setup({ hostname = 'klem.co.il', search = '', storage = new Map(), bloc
         submit: () => submit({preventDefault(){}}),
         click: href => document.dispatchEvent({type:'click',target:{closest:()=>({href})}}),
         events: () => Array.from(window.dataLayer || [], a=>Array.from(a)).filter(a=>a[0]==='event'),
+        configs: () => Array.from(window.dataLayer || [], a=>Array.from(a)).filter(a=>a[0]==='config'),
         resets: () => resets,
     };
 }
+
+test('campaign labels reach Google while personal URL data and click IDs stay excluded', () => {
+    const s = setup({pathname:'/services', choices:{analytics:true},
+        search:'?utm_source=openai&utm_medium=cpc&utm_campaign=klementina_building_management&utm_id=cmpn_123&utm_content=ad_456&utm_term=private-search&openai_click_id=private-click&email=private%40example.com#private-fragment',
+        referrer:'https://example.com/private-path?email=private@example.com'});
+    const config = s.configs()[0][2];
+    assert.equal(config.campaign_source, 'openai');
+    assert.equal(config.campaign_medium, 'cpc');
+    assert.equal(config.campaign_name, 'klementina_building_management');
+    assert.equal(config.campaign_id, 'cmpn_123');
+    assert.equal(config.campaign_content, 'ad_456');
+    assert.equal(config.page_location, 'https://klem.co.il/services');
+    assert.equal(config.page_referrer, 'https://example.com');
+    assert.equal(JSON.stringify(s.configs()).includes('private'), false);
+    assert.equal(s.storage.size, 0);
+});
+
+test('campaign labels are sent once, only when analytics consent is granted', () => {
+    const choices = {advertising:true};
+    const s = setup({choices, search:'?utm_source=qa&utm_medium=test&utm_campaign=klementina_tracking_validation'});
+    assert.equal(s.configs().length, 0);
+    assert.equal(s.scripts.length, 0);
+    choices.analytics = true;
+    s.document.dispatchEvent({type:'klem:privacy-change'});
+    s.document.dispatchEvent({type:'klem:privacy-change'});
+    assert.equal(s.configs().length, 1);
+    assert.equal(s.configs()[0][2].campaign_name, 'klementina_tracking_validation');
+    assert.equal(s.scripts.length, 1);
+    choices.analytics = false;
+    s.document.dispatchEvent({type:'klem:privacy-change'});
+    s.click('tel:+97239153556');
+    assert.equal(s.events().length, 0);
+});
+
+test('missing, duplicated, or unsafe campaign values are not forwarded or persisted', () => {
+    for (const value of ['', 'private@example.com', 'https://example.com/private', '<script>', 'bad\nvalue', '{campaign_id}', 'x'.repeat(101)]) {
+        const s = setup({search:'?utm_source=' + encodeURIComponent(value), choices:{analytics:true}});
+        assert.equal(s.configs()[0][2].campaign_source, undefined);
+        assert.equal(s.storage.size, 0);
+    }
+    const duplicate = setup({search:'?utm_source=openai&utm_source=qa'});
+    assert.equal(duplicate.configs()[0][2].campaign_source, undefined);
+    const direct = setup();
+    assert.equal(direct.configs()[0][2].campaign_source, undefined);
+    assert.equal(direct.configs()[0][2].campaign_name, undefined);
+    const hebrew = setup({search:'?utm_campaign=' + encodeURIComponent('קלמנטינה - ניהול בניינים')});
+    assert.equal(hebrew.configs()[0][2].campaign_name, 'קלמנטינה - ניהול בניינים');
+});
 
 test('accepted form produces one lead in each destination and no contact data', async () => {
     const s = setup({search:'?openai_click_id=opaque-click'});

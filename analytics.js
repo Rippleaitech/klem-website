@@ -4,6 +4,25 @@
 
     const measurementId = "G-4JVRVNQNTD";
     const permits = purpose => window.klemPrivacy?.allows(purpose) === true;
+    function googleCampaign() {
+        // The page URL stays query-free. Forward only bounded campaign labels,
+        // separately, after analytics consent; never forward arbitrary URL data.
+        const query = new URLSearchParams(window.location.search);
+        const fields = {};
+        for (const [parameter, field] of [
+            ['utm_source', 'campaign_source'],
+            ['utm_medium', 'campaign_medium'],
+            ['utm_campaign', 'campaign_name'],
+            ['utm_id', 'campaign_id'],
+            ['utm_content', 'campaign_content'],
+        ]) {
+            const values = query.getAll(parameter);
+            if (values.length !== 1) continue;
+            const value = values[0].trim();
+            if (/^[\p{L}\p{N}_. -]{1,100}$/u.test(value)) fields[field] = value;
+        }
+        return fields;
+    }
     let googleLoaded = false;
     function startGoogle() {
         if (!permits('analytics') || googleLoaded) return;
@@ -17,6 +36,7 @@
             allow_ad_personalization_signals: false,
             page_location: window.location.origin + window.location.pathname,
             page_referrer: (() => { try { return new URL(document.referrer).origin; } catch { return ''; } })(),
+            ...googleCampaign(),
         });
         const tag = document.createElement('script');
         tag.async = true;
