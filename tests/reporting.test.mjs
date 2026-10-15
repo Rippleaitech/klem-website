@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createHmac} from 'node:crypto';
+import {generateKeyPairSync,sign} from 'node:crypto';
 import {createHandler,available} from '../netlify/functions/recording-available.mjs';
 import {memoryDatabase} from '../scripts/memory-store.mjs';
 const now=Date.parse('2026-10-15T20:00:00Z'), prefix='2026-10-14/11111111-1111-4111-8111-111111111111';
@@ -11,12 +11,15 @@ test('reporting excludes tests, withdrawn, expired and missing consent recording
 });
 test('reporting check authenticates bytes, timestamp and production context; returns only a boolean',async()=>{
  const db=memoryDatabase();await db.sessions.setJSON(prefix,{...meta,visitorId:'private'});
- process.env.KLEM_REPORT_INGEST_KEY='synthetic-key-'.repeat(4);
- const raw=JSON.stringify({prefix}),stamp=String(now/1000),signature='sha256='+createHmac('sha256',process.env.KLEM_REPORT_INGEST_KEY).update(`recording-availability\n${stamp}\n${raw}`).digest('hex');
+ const {privateKey,publicKey}=generateKeyPairSync('ed25519');
+ process.env.KLEM_REPORT_PUBLIC_KEY=publicKey.export({type:'spki',format:'pem'});
+ const raw=JSON.stringify({prefix}),stamp=String(now/1000),signature='ed25519='+sign(null,Buffer.from(`recording-availability\n${stamp}\n${raw}`),privateKey).toString('base64');
  const req=(headers={})=>new Request('https://klem.co.il/internal/recording-available',{method:'POST',body:raw,headers:{'x-klem-time':stamp,'x-klem-signature':signature,...headers}});
  const run=createHandler(()=>db,()=>now);
  assert.deepEqual(await (await run(req())).json(),{available:true});
  assert.equal((await run(req({'x-klem-signature':'bad'}))).status,403);
  assert.equal((await run(req({'x-klem-time':String(now/1000-61)}))).status,403);
+ const wrong=generateKeyPairSync('ed25519').privateKey;
+ assert.equal((await run(req({'x-klem-signature':'ed25519='+sign(null,Buffer.from(`recording-availability\n${stamp}\n${raw}`),wrong).toString('base64')}))).status,403);
  db.production=false;assert.equal((await run(req())).status,403);
 });
