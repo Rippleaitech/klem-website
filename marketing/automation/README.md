@@ -9,7 +9,8 @@ media storage and independent settings. ParkClean's account IDs are rejected.
 1. Verify Klem in Windsor's account inventory and complete an account-scoped read.
    Populate `accounts.json` with that exact connector ID/name, then use the same
    IDs for the bot's `KLEM_INSTAGRAM_ACCOUNT_ID` and `KLEM_FACEBOOK_PAGE_ID`.
-   Both entries are intentionally unset until this check succeeds.
+   Facebook 104247378583175 was verified through Windsor on 2026-10-29.
+   Instagram remains unset until its own account check succeeds.
 2. Put the existing Klem ingest key in `private/klem-marketing/connection.json`
    as `ingestKey`, mode 0600. Never copy ParkClean's credentials or commit keys.
 3. Run `node scripts/klem-marketing-management.mjs enable` to sync the isolated

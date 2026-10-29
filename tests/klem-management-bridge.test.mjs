@@ -1,4 +1,5 @@
 import {SOCIAL_ACCOUNTS} from '../marketing/automation/config.mjs';
+Object.assign(SOCIAL_ACCOUNTS.facebook,{accountId:null,username:null});
 Object.assign(SOCIAL_ACCOUNTS.instagram,{accountId:'17841400000999001',username:'klem.test'});
 import test from 'node:test';
 import assert from 'node:assert/strict';
