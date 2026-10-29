@@ -7,3 +7,7 @@ dist/
 .DS_Store
 *.local.json
 .pnpm-store/
+
+# Private marketing state and generated review media
+private/
+outputs/

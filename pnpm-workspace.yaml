@@ -1,2 +1,4 @@
 allowBuilds:
   esbuild: true
+  netlify-cli: false
+  unix-dgram: false
